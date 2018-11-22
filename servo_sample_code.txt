@@ -1,0 +1,23 @@
+// Servo sample codes.
+// For all entries timing can be changed to increase/decrease distance
+// Time is in microseconds
+
+// Full speed forward
+  servoLeft.writeMicroseconds(1700);         // Left wheel counterclockwise
+  servoRight.writeMicroseconds(1300);        // Right wheel clockwise
+  delay(2000);                               // for 2 seconds, modify to increase or decrease distance
+
+ // Turn left in place
+  servoLeft.writeMicroseconds(1300);         // Left wheel clockwise
+  servoRight.writeMicroseconds(1300);        // Right wheel clockwise
+  delay(600);                                // for 0.6 seconds, modify to increase or decrease turn radius
+
+// Turn right in place
+  servoLeft.writeMicroseconds(1700);         // Left wheel counterclockwise
+  servoRight.writeMicroseconds(1700);        // Right wheel counterclockwise
+  delay(600);                                // for 0.6 seconds, modify to increase or decrease turn radius
+
+// Full speed backward
+  servoLeft.writeMicroseconds(1300);         // Left wheel clockwise
+  servoRight.writeMicroseconds(1700);        // Right wheel counterclockwise
+  delay(2000);                               // for 2 seconds, modify to increase or decrease distance
