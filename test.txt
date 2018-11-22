@@ -1,7 +1,0 @@
-<<<<<<< HEAD
-sdfkhsdkdsfhuoasfoasfho
-=======
-sdfkhsdkdsfgggg
-kkk
-123
->>>>>>> 5870be35176b7225bb06031a76a8c912e873fe53
