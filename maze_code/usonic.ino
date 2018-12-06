@@ -6,8 +6,10 @@
 // we could do int if using mm, or should use float?
 
 
+// ping_cm: Send a ping, returns the distance in centimeters or 0 (zero) if no ping echo within set distance limit 
 int get_usonic_data(NewPing sonar){
-    delay(200); // minimum 33 ms
+    delay(50); // minimum 33 ms
+    // do we need check timer here
     return sonar.ping_cm();
 }
 

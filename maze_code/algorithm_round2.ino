@@ -1,6 +1,41 @@
 // algorithm file for round 2
 // nothing with servos / sensors here
 
+char analyse_where_to_go_2(int distance_L_R_F[SONAR_NUM], char letter){
+
+  if(letter == 'L'){
+    if(distance_L_R_F[0] > 30 || distance_L_R_F[0] == 0){
+      return 'L';
+    }else return 'A';
+  else if(letter == 'S'){
+    if(distance_L_R_F[1] > 30 || distance_L_R_F[1] == 0){
+      if(distance_L_R_F[2] > 30 || distance_L_R_F[2] == 0){
+        return 'S';  
+      }else{
+        return 'A';
+      }
+    }else return 'A';
+  else if(letter == 'R'){
+    if(distance_L_R_F[0] > 30 || distance_L_R_F[0] == 0){
+      return 'R';
+    }else return 'A';  
+  }else return 'A';
+  
+  
+  if(distance_L_R_F[0] > 30 || distance_L_R_F[0] == 0){ // left
+      return 'L';
+  } else if(distance_L_R_F[1] > 30 || distance_L_R_F[1] == 0){
+      if(distance_L_R_F[2] > 30 || distance_L_R_F[2] == 0){
+        return 'S';
+      }
+      return 'A';
+  } else if(distance_L_R_F[2] > 30 || distance_L_R_F[2] == 0){
+      return 'R';  
+  } else
+      return 'B'; 
+  }
+}
+
 char get_letter (){
     int index = 0; // use that different
     return(letter_list.charAt(index));

@@ -1,5 +1,3 @@
-// note: every round, higher than 1 is called round 2
-
 // includes
 #include <NewPing.h>
 #include <SoftwareSerial.h>
@@ -71,21 +69,26 @@ void loop() {
   }
  
   if (round_number == 1){
-    direction_letter = analyse_where_to_go(distance_L_R_F);
-    set_letter(direction_letter);
+    direction_letter = analyse_where_to_go_1(distance_L_R_F);
+    if(direction_letter != 'A'){
+      set_letter(direction_letter); 
+    }
   }else{
-    direction_letter = get_letter();
+    if(direction_letter != 'A'){
+      dir_letter = get_letter(); 
+    }
+    direction_letter = analyse_where_to_go_2(distance_L_R_F, dir_letter);
   }
 
   // File: servos.ino
+  // perhaps do that in another therad, so it doesn't stop for every measurement
   switch (direction_letter){
+    case 'A': go_ahead(distance_L_R_F); break; // go ahead, when nothing else
     case 'L': go_left(); break; // turn about 90deg
     case 'R': go_right(); break; // turn about 90deg
-    case 'S': go_straight(); break; // go straight until xxx - different for 2nd round
+    case 'S': go_straight(round_number); break; // go straight: when no right wall in 1 round, when no left wall in second round
     case 'B': go_back(); break; // turn about 180deg
     default: Serial.println("Nothing to do"); break;
   }
-  improve_position(distance_L_R_F); // eventually put that into go_straight
-  // when turning, try to not crash a wall TODO: function
 
 }

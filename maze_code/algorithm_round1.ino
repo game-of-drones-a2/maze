@@ -3,22 +3,20 @@
 
 // do something with "as long as whatever, go straight"
 // analyse the data of usonic here
-char analyse_where_to_go(int distance_L_R_F[SONAR_NUM]){
+char analyse_where_to_go_1(int distance_L_R_F[SONAR_NUM]){
   
-  if(distance_L_R_F[0] > 30){ // left
+  if(distance_L_R_F[0] > 30 || distance_L_R_F[0] == 0){ // left
       return 'L';
-  } else if(distance_L_R_F[1] > 30){
-      return 'S'; 
-  } else if(distance_L_R_F[1] > 30){
+  } else if(distance_L_R_F[1] > 30 || distance_L_R_F[1] == 0){
+      if(distance_L_R_F[2] > 30 || distance_L_R_F[2] == 0){
+        return 'S';
+      }
+      return 'A';
+  } else if(distance_L_R_F[2] > 30 || distance_L_R_F[2] == 0){
       return 'R';  
-  } else if(distance_L_R_F[1] > 30){
-      return 'B'; 
   } else {
-    Serial.println("ERROR with letters in analyse_where_to_go");
+      return 'B'; 
   }
-     
-    
-    
 }
 
 void set_letter (char direction_letter){ // is it like append? test that func!
