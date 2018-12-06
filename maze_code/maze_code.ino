@@ -15,15 +15,15 @@ int pause;
 const int button_start = 2; // INTERRUPT
 const int button_end = 3; // INTERRUPT
 // SERVOS
-const int servo_left = 11; // PWM
-const int servo_right = 12; // PWM
+const int servo_left = 10; // PWM
+const int servo_right = 11; // PWM
 // USONIC
 const int usonic_left_trigger = 4;
 const int usonic_left_echo = 5;
 const int usonic_middle_trigger = 6;
 const int usonic_middle_echo = 7;
-const int usonic_middle_trigger = 8;
-const int usonic_middle_echo = 9;
+const int usonic_right_trigger = 8;
+const int usonic_right_echo = 9;
 
 #DEFINE MAX_DISTANCE 40 // max distance in cm
 #DEFINE SONAR_NUM 3
@@ -41,11 +41,13 @@ void setup() {
   round_number = 0;
   pause = 1;
 
+  Serial.begin(115200); // need that for usonic newPing
+
   // buttons, are working at interrupt
   //attachInterrupt(digitalPinToInterrupt(pin), ISR, mode); // (recommended)
-  pinMode(button_start, INPUT_PULLUP); // or pulldown?
+  pinMode(button_start, INPUT); // or INPUT_PULLUP or INPUT_PULLDOWN
   attachInterrupt(digitalPinToInterrupt(button_start), read_button_start, RISING); // or use CHANGE
-  pinMode(button_end, INPUT_PULLUP);
+  pinMode(button_end, INPUT);
   attachInterrupt(digitalPinToInterrupt(button_end), read_button_end, RISING); // or use CHANGE
 }
 

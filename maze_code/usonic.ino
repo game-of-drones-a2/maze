@@ -6,8 +6,8 @@
 // we could do int if using mm, or should use float?
 
 
-
-void get_usonic_data(int distance_L_R_F[3]){
-  
+int get_usonic_data(NewPing sonar){
+    delay(200); // minimum 33
+    return sonar.ping_cm();
 }
 
