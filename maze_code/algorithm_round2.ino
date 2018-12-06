@@ -6,6 +6,7 @@ char get_letter (){
     return(letter_list.charAt(index));
 }
 
+// called when interrupt start button and second round
 void transfer_table (){
   char transfer_letter = 'X';
   int i;
