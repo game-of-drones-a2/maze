@@ -7,7 +7,7 @@
 
 
 int get_usonic_data(NewPing sonar){
-    delay(200); // minimum 33
+    delay(200); // minimum 33 ms
     return sonar.ping_cm();
 }
 

@@ -2,6 +2,7 @@
 
 // includes
 #include <NewPing.h>
+#include <SoftwareSerial.h>
 
 // variables - try to put them to functions - global is always bad
 String letter_list;
@@ -25,7 +26,7 @@ const int usonic_middle_echo = 7;
 const int usonic_right_trigger = 8;
 const int usonic_right_echo = 9;
 
-#DEFINE MAX_DISTANCE 40 // max distance in cm
+#DEFINE MAX_DISTANCE 100 // max distance in cm
 #DEFINE SONAR_NUM 3
 
 NewPing sonar[SONAR_NUM] = { // NewPing object array
@@ -34,16 +35,21 @@ NewPing sonar[SONAR_NUM] = { // NewPing object array
   NewPing(usonic_right_trigger, usonic_right_echo, MAX_DISTANCE)
 }
 
+// use for other serial
+// SoftwareSerial serial(10, 11); // RX, TX
+
 void setup() {
   // put your setup code here, to run once:
+
+  Serial.begin(115200); // need that for usonic newPing
+
+  // initialisation of variables
   direction_letter = 'X';
   letter_list = String('X');
   round_number = 0;
   pause = 1;
 
-  Serial.begin(115200); // need that for usonic newPing
-
-  // buttons, are working at interrupt
+  // buttons with interrupt
   //attachInterrupt(digitalPinToInterrupt(pin), ISR, mode); // (recommended)
   pinMode(button_start, INPUT); // or INPUT_PULLUP or INPUT_PULLDOWN
   attachInterrupt(digitalPinToInterrupt(button_start), read_button_start, RISING); // or use CHANGE
@@ -55,11 +61,11 @@ void loop() {
   // put your main code here, to run repeatedly:
   // create files with the functions for each:
 
-  while(pause == 1){
+  //while(pause == 1){
     // wait
-  }
+  //}
 
-  // could do that in loop + put NewPing objects to array
+  // get the distance for the 3 sensors
   for(int i = 0; i < SONAR_NUM; i++){
       distance_L_R_F[i] = get_usonic_data(sonar[i]);
   }
