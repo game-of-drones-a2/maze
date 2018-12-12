@@ -5,11 +5,11 @@
 // maybe something bigger than int? use uint? 8, 16, 32? how sensitive are the sensors? do we need it that sensitive?
 // we could do int if using mm, or should use float?
 
+    // do we need check timer here
 
 // ping_cm: Send a ping, returns the distance in centimeters or 0 (zero) if no ping echo within set distance limit 
 int get_usonic_data(NewPing sonar){
     delay(50); // minimum 33 ms
-    // do we need check timer here
     return sonar.ping_cm();
 }
 
