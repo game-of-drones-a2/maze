@@ -30,10 +30,10 @@ const int servo_right = 6; // PWM 11
 // USONIC
 const int usonic_left_trigger = 2; // 4;
 const int usonic_left_echo = 3; // 5;
-const int usonic_middle_trigger = 9; // 6;
-const int usonic_middle_echo = 10; //7;
-const int usonic_right_trigger = 8;
-const int usonic_right_echo = 7; // 9;
+const int usonic_middle_trigger = A0; // 6;
+const int usonic_middle_echo = A1; //7;
+const int usonic_right_trigger = 9;
+const int usonic_right_echo = 10; // 9;
 
 const int led_left = A5;
 const int led_right = A4;
@@ -41,7 +41,7 @@ const int led_right = A4;
 #define MAX_DISTANCE 100 // max distance in cm
 #define SONAR_NUM 3
 
-#define MAX_WALL_DISTANCE 30
+#define MAX_WALL_DISTANCE 20
 
 #define LEFT 0
 #define STRAIGHT 1
@@ -78,7 +78,7 @@ void setup() {
   // initialisation of variables
   direction_letter = 'X';
   letter_list = String('X');
-  round_number = 0;
+  round_number = 1;
   pause = 1;
 
   // buttons with interrupt
@@ -90,9 +90,6 @@ void setup() {
 }
 
 void loop() {
-
-  
-  
   // put your main code here, to run repeatedly:
   // create files with the functions for each:
 
@@ -102,21 +99,23 @@ void loop() {
 
   //digitalWrite(led_pin2, HIGH);
   //digitalWrite(led_pin, HIGH);
-/*
+  
   three_usonics(); // get data of all the three usonic sensors
+  direction_letter = analyse_where_to_go_1(distance_L_R_F);
+
  
-  if (round_number == 1){
-    direction_letter = analyse_where_to_go_1(distance_L_R_F);
-    if(direction_letter != 'A'){
-      set_letter(direction_letter); 
-    }
-  }else{
+  //if (round_number == 1){
+    //direction_letter = analyse_where_to_go_1(distance_L_R_F);
+    //if(direction_letter != 'A'){
+      //set_letter(direction_letter); 
+    //}
+  /*}/*else{
     if(direction_letter != 'A'){
       direction_letter = get_letter(); 
     }
     direction_letter = analyse_where_to_go_2(distance_L_R_F, direction_letter);
   }
-
+*/
   // File: servos.ino
   // perhaps do that in another therad, so it doesn't stop for every measurement
   switch (direction_letter){
@@ -128,7 +127,7 @@ void loop() {
     default: Serial.println("Nothing to do"); break;
   }
   
-  if(FALSE){ // when end is reached
+/*  if(FALSE){ // when end is reached
     go_stop();
     servoLeft.detach();
     servoRight.detach();

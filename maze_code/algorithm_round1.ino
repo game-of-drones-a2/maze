@@ -8,7 +8,7 @@ char analyse_where_to_go_1(int distance_L_R_F[SONAR_NUM]){
       return 'L';
   } else if(distance_L_R_F[STRAIGHT] > MAX_WALL_DISTANCE || distance_L_R_F[STRAIGHT] == 0){
       if(distance_L_R_F[RIGHT] > MAX_WALL_DISTANCE || distance_L_R_F[RIGHT] == 0){
-        return 'S';
+        return 'S'; // one time, until wall is detected TODO
       }
       return 'A';
   } else if(distance_L_R_F[RIGHT] > MAX_WALL_DISTANCE || distance_L_R_F[RIGHT] == 0){
