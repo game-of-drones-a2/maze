@@ -30,8 +30,8 @@ const int servo_right = 6; // PWM 11
 // USONIC
 const int usonic_left_trigger = 2; // 4;
 const int usonic_left_echo = 3; // 5;
-const int usonic_middle_trigger = A0; // 6;
-const int usonic_middle_echo = A1; //7;
+const int usonic_middle_trigger = 8; // 6;
+const int usonic_middle_echo = 7; //7;
 const int usonic_right_trigger = 9;
 const int usonic_right_echo = 10; // 9;
 

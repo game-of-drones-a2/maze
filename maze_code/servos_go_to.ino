@@ -17,10 +17,10 @@ void go(int speed_left, int speed_right, int delay_time){
 
 void go_left(){ 
   blink(1,0);
-  go(1700, 1420, 100); // go a bit to the front
+  //go(1700, 1420, 100); // go a bit to the front
   do{
     go(1300, 1300, 250); // turn a bit left
-    go(1700, 1420, 100); // go a bit to the front 
+    go(1700, 1420, 50); // go a bit to the front 
     three_usonics();
   }while(distance_L_R_F[LEFT] > 20 || distance_L_R_F[LEFT] == 0);
   blink(0,0); 
@@ -29,10 +29,10 @@ void go_left(){
 
 void go_right(){
   blink(0,1);
-  go(1700, 1420, 100); // go a bit to the front
+  //go(1700, 1420, 100); // go a bit to the front
   do{
     go(1700, 1700, 250); // turn a bit left
-    go(1700, 1420, 100); // go a bit to the front
+    go(1700, 1420, 50); // go a bit to the front
     three_usonics();
   }while(distance_L_R_F[RIGHT] > 20 || distance_L_R_F[RIGHT] == 0);
   blink(0,0); 

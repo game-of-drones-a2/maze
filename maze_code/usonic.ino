@@ -9,6 +9,7 @@
 
 // get the distance for the 3 sensors
 int three_usonics(){
+  Serial.println("whatever");
   for(int i = 0; i < SONAR_NUM; i++){
     distance_L_R_F[i] = get_usonic_data(sonar[i]);
     Serial.println(distance_L_R_F[i]);
