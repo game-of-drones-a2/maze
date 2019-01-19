@@ -8,8 +8,8 @@ Servo servoRight;
  
 void setup()                                 // Built-in initialization block
 {
-  servoLeft.attach(3);                      // Attach left signal to pin 3
-  servoRight.attach(2);                     // Attach right signal to pin 2
+  servoLeft.attach(5);                      // Attach left signal to pin 3
+  servoRight.attach(6);                     // Attach right signal to pin 2
 
   // Full speed forward
   servoLeft.writeMicroseconds(1700);         // Left wheel counterclockwise

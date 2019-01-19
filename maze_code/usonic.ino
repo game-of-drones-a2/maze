@@ -7,9 +7,18 @@
 
     // do we need check timer here
 
+// get the distance for the 3 sensors
+int three_usonics(){
+  for(int i = 0; i < SONAR_NUM; i++){
+    distance_L_R_F[i] = get_usonic_data(sonar[i]);
+    Serial.println(distance_L_R_F[i]);
+  }
+}
+
 // ping_cm: Send a ping, returns the distance in centimeters or 0 (zero) if no ping echo within set distance limit 
 int get_usonic_data(NewPing sonar){
-    delay(50); // minimum 33 ms
+    delay(200); // minimum 33 ms
     return sonar.ping_cm();
 }
+
 

@@ -1,92 +1,83 @@
 // algorithm file for round 2
 // nothing with servos / sensors here
 
-char analyse_where_to_go_2(int distance_L_R_F[SONAR_NUM], char letter){
+char analyse_where_to_go_2(int distance_L_R_F[SONAR_NUM], char letter) {
 
-  if(letter == 'L'){
-    if(distance_L_R_F[0] > 30 || distance_L_R_F[0] == 0){
+  /* LETTER L */
+  if (letter == 'L') {
+    if (distance_L_R_F[LEFT] > MAX_WALL_DISTANCE || distance_L_R_F[LEFT] == 0) {
       return 'L';
-    }else return 'A';
-  else if(letter == 'S'){
-    if(distance_L_R_F[1] > 30 || distance_L_R_F[1] == 0){
-      if(distance_L_R_F[2] > 30 || distance_L_R_F[2] == 0){
-        return 'S';  
-      }else{
+    } else return 'A';
+  /* LETTER S */
+  } else if (letter == 'S') {
+    if (distance_L_R_F[STRAIGHT] > MAX_WALL_DISTANCE || distance_L_R_F[STRAIGHT] == 0) {
+      if (distance_L_R_F[RIGHT] > MAX_WALL_DISTANCE || distance_L_R_F[RIGHT] == 0) {
+        return 'S';
+      } else {
         return 'A';
       }
-    }else return 'A';
-  else if(letter == 'R'){
-    if(distance_L_R_F[0] > 30 || distance_L_R_F[0] == 0){
+    } else return 'A'; // maybe dangerous
+   /* LETTER R */
+  } else if (letter == 'R') {
+    if (distance_L_R_F[LEFT] > MAX_WALL_DISTANCE || distance_L_R_F[LEFT] == 0) {
       return 'R';
-    }else return 'A';  
-  }else return 'A';
+    } else return 'A';
+  } else return 'A'; // was A before
   
-  
-  if(distance_L_R_F[0] > 30 || distance_L_R_F[0] == 0){ // left
-      return 'L';
-  } else if(distance_L_R_F[1] > 30 || distance_L_R_F[1] == 0){
-      if(distance_L_R_F[2] > 30 || distance_L_R_F[2] == 0){
-        return 'S';
-      }
-      return 'A';
-  } else if(distance_L_R_F[2] > 30 || distance_L_R_F[2] == 0){
-      return 'R';  
-  } else
-      return 'B'; 
-  }
 }
 
-char get_letter (){
-    int index = 0; // use that different
-    return(letter_list.charAt(index));
+char get_letter () {
+  int index = 0; // use that different
+  return (letter_list.charAt(index));
 }
 
 // called when interrupt start button and second round
-void transfer_table (){
+void transfer_table () {
   char transfer_letter = 'X';
   int i;
-  for(i = 0; i < letter_list.length(); i++){ // eventually, while not end or i-- at some point
-    if(letter_list.charAt(i) == 'B'){
-      transfer_letter = get_transfer_letter(i-1, i+1);
-      letter_list.replace(letter_list.substring(i-1, i+1), String(transfer_letter));
-      if(transfer_letter == 'B'){
-        i=i-2; // or not?!
+  for (i = 0; i < letter_list.length(); i++) { // eventually, while not end or i-- at some point
+    if (letter_list.charAt(i) == 'B') {
+      transfer_letter = get_transfer_letter(i - 1, i + 1);
+      letter_list.replace(letter_list.substring(i - 1, i + 1), String(transfer_letter));
+      if (transfer_letter == 'B') {
+        i = i - 2; // or not?!
       }
-    } 
+    }
   }
 }
 
 // called in function transfer_table()
-char get_transfer_letter(char dec, char inc){
+char get_transfer_letter(char dec, char inc) {
   char transf = 'X';
 
-  if(dec = 'L'){
-    switch(inc) {
+  if (dec = 'L') {
+    switch (inc) {
       case ('L'): transf = 'S'; break;
       case ('R'): transf = 'B'; break;
       case ('S'): transf = 'R'; break;
       default: Serial.println("There is a problem"); break;
-    }    
-  }  
-  else if(dec == 'R'){
-    switch(inc) {
+    }
+  }
+  else if (dec == 'R') {
+    switch (inc) {
       case ('L'): transf = 'B'; break;
       case ('R'): transf = 'S'; break;
       case ('S'): transf = 'L'; break;
       default: Serial.println("There is a problem"); break;
-    }    
+    }
   }
-  else if(dec == 'S'){
-    switch(inc) {
+  else if (dec == 'S') {
+    switch (inc) {
       case ('L'): transf = 'R'; break;
       case ('R'): transf = 'L'; break;
       case ('S'): transf = 'B'; break;
       default: Serial.println("There is a problem"); break;
-    }    
-  }else{
+    }
+  } else {
     Serial.println("There is a problem");
   }
   return transf;
 }
+
 
 

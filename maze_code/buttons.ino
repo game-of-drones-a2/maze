@@ -16,3 +16,4 @@ void read_button_start (){
 void read_button_end (){
   pause = 1;
 }
+
