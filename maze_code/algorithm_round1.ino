@@ -1,17 +1,19 @@
 // algorithm file for round 1
 // nothing with servos / sensors here
 
-
 char analyse_where_to_go_1(int distance_L_R_F[SONAR_NUM]){
-  
-  if(distance_L_R_F[LEFT] > MAX_WALL_DISTANCE || distance_L_R_F[LEFT] == 0){
+
+  if ( (no_wall(distance_L_R_F[LEFT]) == true) && (no_wall(distance_L_R_F[STRAIGHT]) == true) && (no_wall(distance_L_R_F[RIGHT]) == true) ){
+      return 'E'; // end of maze
+  } else 
+  if(no_wall(distance_L_R_F[LEFT]) == true){
       return 'L';
-  } else if(distance_L_R_F[STRAIGHT] > MAX_WALL_DISTANCE || distance_L_R_F[STRAIGHT] == 0){
-      if(distance_L_R_F[RIGHT] > MAX_WALL_DISTANCE || distance_L_R_F[RIGHT] == 0){
+  } else if(no_wall(distance_L_R_F[STRAIGHT]) == true){
+      if(no_wall(distance_L_R_F[RIGHT])== true){
         return 'S'; // one time, until wall is detected TODO
       }
       return 'A';
-  } else if(distance_L_R_F[RIGHT] > MAX_WALL_DISTANCE || distance_L_R_F[RIGHT] == 0){
+  } else if(no_wall(distance_L_R_F[RIGHT]) == true){
       return 'R';  
   } else return 'B'; 
 }

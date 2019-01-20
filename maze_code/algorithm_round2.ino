@@ -5,13 +5,13 @@ char analyse_where_to_go_2(int distance_L_R_F[SONAR_NUM], char letter) {
 
   /* LETTER L */
   if (letter == 'L') {
-    if (distance_L_R_F[LEFT] > MAX_WALL_DISTANCE || distance_L_R_F[LEFT] == 0) {
+    if (no_wall(distance_L_R_F[LEFT]) == true) {
       return 'L';
     } else return 'A';
   /* LETTER S */
   } else if (letter == 'S') {
-    if (distance_L_R_F[STRAIGHT] > MAX_WALL_DISTANCE || distance_L_R_F[STRAIGHT] == 0) {
-      if (distance_L_R_F[RIGHT] > MAX_WALL_DISTANCE || distance_L_R_F[RIGHT] == 0) {
+    if (no_wall(distance_L_R_F[STRAIGHT]) == true) {
+      if (no_wall(distance_L_R_F[RIGHT]) == true) {
         return 'S';
       } else {
         return 'A';
@@ -19,7 +19,7 @@ char analyse_where_to_go_2(int distance_L_R_F[SONAR_NUM], char letter) {
     } else return 'A'; // maybe dangerous
    /* LETTER R */
   } else if (letter == 'R') {
-    if (distance_L_R_F[LEFT] > MAX_WALL_DISTANCE || distance_L_R_F[LEFT] == 0) {
+    if (no_wall(distance_L_R_F[LEFT]) == true) {
       return 'R';
     } else return 'A';
   } else return 'A'; // was A before

@@ -15,8 +15,8 @@ int pause;
 
 #define DEFAULT_LEFT_SPEED 1700
 #define DEFAULT_RIGHT_SPEED 1420
-int left_speed;
-int right_speed;
+
+int left_right_delay[3];
 
 // set ports
 // BUTTONS
@@ -37,11 +37,12 @@ const int usonic_right_echo = 10; // 9;
 
 const int led_left = A5;
 const int led_right = A4;
+const int led_front = A3;
 
-#define MAX_DISTANCE 100 // max distance in cm
+#define MAX_DISTANCE 100 // max distance that sonar detects in cm
 #define SONAR_NUM 3
 
-#define MAX_WALL_DISTANCE 20
+#define MAX_WALL_DISTANCE 15
 
 #define LEFT 0
 #define STRAIGHT 1
@@ -55,7 +56,7 @@ NewPing sonar[SONAR_NUM] = { // NewPing object array
 };
 
 /* PROTYPES -- need that??? */
-int get_usonic_data(NewPing sonar);
+//int get_usonic_data(NewPing sonar);
 
 
 // use for other serial
@@ -68,6 +69,7 @@ void setup() {
 
   pinMode(led_left, OUTPUT);
   pinMode(led_right, OUTPUT);
+  pinMode(led_front, OUTPUT);
 
   servoLeft.attach(servo_left);
   servoRight.attach(servo_right);
@@ -87,6 +89,8 @@ void setup() {
   //attachInterrupt(digitalPinToInterrupt(button_start), read_button_start, RISING); // or use CHANGE
 //  pinMode(button_end, INPUT);
   //attachInterrupt(digitalPinToInterrupt(button_end), read_button_end, RISING); // or use CHANGE
+
+  start_maze(); // is working
 }
 
 void loop() {
@@ -97,41 +101,40 @@ void loop() {
     // wait
   ////}
 
-  //digitalWrite(led_pin2, HIGH);
-  //digitalWrite(led_pin, HIGH);
+  
   
   three_usonics(); // get data of all the three usonic sensors
-  direction_letter = analyse_where_to_go_1(distance_L_R_F);
-
- 
-  //if (round_number == 1){
-    //direction_letter = analyse_where_to_go_1(distance_L_R_F);
-    //if(direction_letter != 'A'){
-      //set_letter(direction_letter); 
-    //}
-  /*}/*else{
+  
+  if (round_number == 1){
+    direction_letter = analyse_where_to_go_1(distance_L_R_F);
+    if(direction_letter != 'A'){
+      set_letter(direction_letter); 
+    }
+  } else {
     if(direction_letter != 'A'){
       direction_letter = get_letter(); 
     }
-    direction_letter = analyse_where_to_go_2(distance_L_R_F, direction_letter);
+    direction_letter = analyse_where_to_go_2(distance_L_R_F, direction_letter); */
   }
-*/
-  // File: servos.ino
-  // perhaps do that in another therad, so it doesn't stop for every measurement
-  switch (direction_letter){
-    case 'A': go_ahead(distance_L_R_F); break; // go ahead, when nothing else
-    case 'L': go_left(); break; // turn about 90deg
-    case 'R': go_right(); break; // turn about 90deg
-    case 'S': go_straight(round_number); break; // go straight: when no right wall in 1 round, when no left wall in second round
-    case 'B': go_back(); break; // turn about 180deg
-    default: Serial.println("Nothing to do"); break;
+
+
+  Serial.print(direction_letter);
+  if(direction_letter == 'E'){
+    round_number ++;
+  }
+    // File: servos_go_to.ino
+    // perhaps do that in another therad, so it doesn't stop for every measurement
+    switch (direction_letter){
+      case 'A': go_ahead(); break; // go ahead, when nothing else
+      case 'L': go_left(); break; // turn about 90deg
+      case 'R': go_right(); break; // turn about 90deg
+      case 'S': go_straight(round_number); break; // go straight: when no right wall in 1 round, when no left wall in second round
+      case 'B': go_back(); break; // turn about 180deg
+      case 'E': go_stop(); break; // end of the maze
+      default: Serial.println("Nothing to do"); break;
+    }
+    go(left_right_delay[0], left_right_delay[1], left_right_delay[2]);
   }
   
-/*  if(FALSE){ // when end is reached
-    go_stop();
-    servoLeft.detach();
-    servoRight.detach();
-  }
-*/
 }
 

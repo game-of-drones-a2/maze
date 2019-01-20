@@ -16,51 +16,64 @@ void go(int speed_left, int speed_right, int delay_time){
 }
 
 void go_left(){ 
-  blink(1,0);
+  blink(1,0,0);
   //go(1700, 1420, 100); // go a bit to the front
   do{
     go(1300, 1300, 250); // turn a bit left
-    go(1700, 1420, 50); // go a bit to the front 
+    go(1700, 1420, 150); // go a bit to the front 
     three_usonics();
-  }while(distance_L_R_F[LEFT] > 20 || distance_L_R_F[LEFT] == 0);
-  blink(0,0); 
-  //go(1500, 1500, 100);
+  }while(no_wall(distance_L_R_F[LEFT]));
 }
 
 void go_right(){
-  blink(0,1);
+  blink(0,1,0);
   //go(1700, 1420, 100); // go a bit to the front
   do{
     go(1700, 1700, 250); // turn a bit left
-    go(1700, 1420, 50); // go a bit to the front
+    go(1700, 1420, 150); // go a bit to the front
     three_usonics();
-  }while(distance_L_R_F[RIGHT] > 20 || distance_L_R_F[RIGHT] == 0);
-  blink(0,0); 
-  //go(1500, 1500, 100); // = stop
+  }while(no_wall(distance_L_R_F[RIGHT]));
 }
 
 // go straight, until a wall is detected (1st round 'R', second round 'L')
 void go_straight(int round_number){
-  blink(1,1);
+  blink(0,0,1);
   go(1700, 1420, 100);
 }
 
 void go_back(){
-  blink(0,0);
-  //go(1, 1, 100);  
+  blink(0,0,0);
+  go(1700, 1700, 1100);  
 }
 
 void go_stop(){
-  blink(0,0);
   go(1500, 1500, 100);
+  blink(0,0,0);
+  delay(500);
+  blink(1,0,1);
+  delay(500);
+  blink(0,0,0);
+  delay(500);
+  blink(1,0,1);
+
+  // servoLeft.detach();
+  // servoRight.detach();
 }
 
-void go_ahead(int distance_L_R_F[SONAR_NUM]){
-  blink(0,0);
+void go_ahead(){
+  blink(1,1,1);
   go(1700, 1420, 100);
-
 }
 
-
+void go_correct(int left_speed, int right_speed){
+  if(correct_position(distance_L_R_F[LEFT]) == true){
+    left_speed += 5;
+    right_speed -= 5;  
+  }
+  if correct_position(distance_L_R_F[RIGHT]) == true){
+    right_speed += 5;  
+    left_speed -= 5;
+  }
+}
 
 
