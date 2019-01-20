@@ -15,7 +15,10 @@ int pause;
 
 #define DEFAULT_LEFT_SPEED 1700
 #define DEFAULT_RIGHT_SPEED 1420
+#define DEFAULT_DELAY 100
 
+int left_speed;
+int right_speed;
 int left_right_delay[3];
 
 // set ports
@@ -42,7 +45,8 @@ const int led_front = A3;
 #define MAX_DISTANCE 100 // max distance that sonar detects in cm
 #define SONAR_NUM 3
 
-#define MAX_WALL_DISTANCE 15
+#define MAX_WALL_DISTANCE 20
+#define END_DISTANCE 50
 
 #define LEFT 0
 #define STRAIGHT 1
@@ -77,6 +81,10 @@ void setup() {
   left_speed = DEFAULT_LEFT_SPEED;
   right_speed = DEFAULT_RIGHT_SPEED;
 
+  left_right_delay[0] = DEFAULT_LEFT_SPEED;
+  left_right_delay[1] = DEFAULT_RIGHT_SPEED;
+  left_right_delay[2] = DEFAULT_DELAY;
+
   // initialisation of variables
   direction_letter = 'X';
   letter_list = String('X');
@@ -100,23 +108,22 @@ void loop() {
   //while(pause == 1){
     // wait
   ////}
-
-  
-  
+ 
   three_usonics(); // get data of all the three usonic sensors
   
   if (round_number == 1){
+    //Serial.println("Round 1");
     direction_letter = analyse_where_to_go_1(distance_L_R_F);
     if(direction_letter != 'A'){
       set_letter(direction_letter); 
     }
-  } else {
+  } /*else {
+    Serial.println("Round 2+");
     if(direction_letter != 'A'){
       direction_letter = get_letter(); 
     }
-    direction_letter = analyse_where_to_go_2(distance_L_R_F, direction_letter); */
-  }
-
+    direction_letter = analyse_where_to_go_2(distance_L_R_F, direction_letter);
+  }*/
 
   Serial.print(direction_letter);
   if(direction_letter == 'E'){
@@ -133,8 +140,8 @@ void loop() {
       case 'E': go_stop(); break; // end of the maze
       default: Serial.println("Nothing to do"); break;
     }
-    go(left_right_delay[0], left_right_delay[1], left_right_delay[2]);
-  }
+    //go(left_right_delay[0], left_right_delay[1], left_right_delay[2]);
+  
   
 }
 

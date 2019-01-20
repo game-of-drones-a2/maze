@@ -18,7 +18,7 @@ int three_usonics(){
 
 // ping_cm: Send a ping, returns the distance in centimeters or 0 (zero) if no ping echo within set distance limit 
 int get_usonic_data(NewPing sonar){
-    delay(50); // minimum 33 ms
+    delay(100); // minimum 33 ms
     return sonar.ping_cm();
 }
 
@@ -29,8 +29,15 @@ bool no_wall(int distance){
   return false; // wall
 }
 
-bool correct_position(int distance){
-  if (distance < 3){
+bool end_wall(int distance){
+  if (distance > END_DISTANCE || distance == 0){
+    return true; // no wall
+  }
+  return false; // wall
+}
+
+bool close_wall(int distance){
+  if (distance < 3 && distance != 0){
     return true; // no wall
   }
   return false;

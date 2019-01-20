@@ -3,7 +3,7 @@
 
 char analyse_where_to_go_1(int distance_L_R_F[SONAR_NUM]){
 
-  if ( (no_wall(distance_L_R_F[LEFT]) == true) && (no_wall(distance_L_R_F[STRAIGHT]) == true) && (no_wall(distance_L_R_F[RIGHT]) == true) ){
+  if ( (end_wall(distance_L_R_F[LEFT]) == true) && (end_wall(distance_L_R_F[STRAIGHT]) == true) && (end_wall(distance_L_R_F[RIGHT]) == true) ){
       return 'E'; // end of maze
   } else 
   if(no_wall(distance_L_R_F[LEFT]) == true){

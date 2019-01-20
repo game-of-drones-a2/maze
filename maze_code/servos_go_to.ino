@@ -17,20 +17,20 @@ void go(int speed_left, int speed_right, int delay_time){
 
 void go_left(){ 
   blink(1,0,0);
-  //go(1700, 1420, 100); // go a bit to the front
+  go(1700, 1420, 300); // go a bit to the front
   do{
     go(1300, 1300, 250); // turn a bit left
-    go(1700, 1420, 150); // go a bit to the front 
+    go(1700, 1420, 300); // go a bit to the front 
     three_usonics();
   }while(no_wall(distance_L_R_F[LEFT]));
 }
 
 void go_right(){
   blink(0,1,0);
-  //go(1700, 1420, 100); // go a bit to the front
+  go(1700, 1420, 300); // go a bit to the front
   do{
     go(1700, 1700, 250); // turn a bit left
-    go(1700, 1420, 150); // go a bit to the front
+    go(1700, 1420, 300); // go a bit to the front
     three_usonics();
   }while(no_wall(distance_L_R_F[RIGHT]));
 }
@@ -38,7 +38,10 @@ void go_right(){
 // go straight, until a wall is detected (1st round 'R', second round 'L')
 void go_straight(int round_number){
   blink(0,0,1);
-  go(1700, 1420, 100);
+  //do{
+  //go_correct(1700, 1420);
+  go(1700, 1420, 100);  
+ //}while(no_wall(distance_L_R_F[RIGHT]));
 }
 
 void go_back(){
@@ -50,11 +53,11 @@ void go_stop(){
   go(1500, 1500, 100);
   blink(0,0,0);
   delay(500);
-  blink(1,0,1);
+  blink(1,1,0);
   delay(500);
   blink(0,0,0);
   delay(500);
-  blink(1,0,1);
+  blink(1,1,0);
 
   // servoLeft.detach();
   // servoRight.detach();
@@ -62,17 +65,20 @@ void go_stop(){
 
 void go_ahead(){
   blink(1,1,1);
+  //go_correct(1700, 1420);
   go(1700, 1420, 100);
 }
 
-void go_correct(int left_speed, int right_speed){
-  if(correct_position(distance_L_R_F[LEFT]) == true){
-    left_speed += 5;
-    right_speed -= 5;  
+void go_correct(int l_speed, int r_speed){
+  while(close_wall(distance_L_R_F[LEFT]) == true){
+    l_speed += 5;
+    r_speed -= 5;  
+    go(l_speed, r_speed, 100);
   }
-  if correct_position(distance_L_R_F[RIGHT]) == true){
-    right_speed += 5;  
-    left_speed -= 5;
+  while(close_wall(distance_L_R_F[RIGHT]) == true){
+    r_speed += 5;  
+    l_speed -= 5;
+    go(l_speed, r_speed, 100);
   }
 }
 
