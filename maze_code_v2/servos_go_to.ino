@@ -34,7 +34,7 @@ void go_right(){
   go(1700, 1420, 300); // go a bit to the front
   do{
     go_correct();
-    go(1700, 1700, 250); // turn a bit left
+    go(1700, 1700, 250); // turn a bit right
     go(1700, 1420, 300); // go a bit to the front
     three_usonics();
   }while(no_wall(distance_L_R_F[RIGHT]));
@@ -61,7 +61,7 @@ void go_straight(int round_number){
 void go_back(){
   blink(0,0,0);
   do{
-    go_correct();
+    //go_correct();
     go(1700, 1700, 1100);
     three_usonics();
   }while(no_wall(distance_L_R_F[STRAIGHT]));
@@ -93,23 +93,21 @@ void go_ahead(){
 // eventually get go left, go right here
 void go_correct(){
  while(close_wall(distance_L_R_F[LEFT]) == true){
-    if((left_delay_right[LEFT] - 50) > 1500){
-      left_delay_right[LEFT] -= 50;
-    }
-    if((left_delay_right[RIGHT] + 50) < 1700){
-      left_delay_right[RIGHT] += 50; 
-    }  
-    go(left_delay_right[LEFT], left_delay_right[RIGHT], left_delay_right[DELAY]);
+    go(1520, 1520, 5); // turn a bit right    change to 1550 1550?
+    // go(left_delay_right[LEFT], left_delay_right[RIGHT], left_delay_right[DELAY]);
+    Serial.print(left_delay_right[LEFT]);
+    Serial.print(left_delay_right[RIGHT]);
     three_usonics();
   }
   while(close_wall(distance_L_R_F[RIGHT]) == true){
-    left_delay_right[LEFT] += 5;
-    left_delay_right[RIGHT] -= 5;  
-    go(left_delay_right[LEFT], left_delay_right[RIGHT], left_delay_right[DELAY]);
+    go(1470, 1470, 5); // turn a bit left  
+    // left_delay_right[LEFT] += 5;
+    // left_delay_right[RIGHT] -= 5;  
+    // go(left_delay_right[LEFT], left_delay_right[RIGHT], left_delay_right[DELAY]);
     three_usonics();
   }
   while(close_wall(distance_L_R_F[STRAIGHT]) == true){
-    go(100, 100, 100);
+    go(1300, 1580, 100);
     three_usonics();
   }
 }
