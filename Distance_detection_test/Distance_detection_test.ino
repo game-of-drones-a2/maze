@@ -17,5 +17,5 @@ void loop() {
                  // 29ms should be the shortest delay between pings.
     x = sonar.ping_cm();
     if (x <= 10)
-    Serial.print("yeet ");
+    Serial.print("yeet ");    //test confirmed to work. If not, change baud rate or cable
 }
