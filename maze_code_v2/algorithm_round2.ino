@@ -27,8 +27,7 @@ char analyse_where_to_go_2(int distance_L_R_F[SONAR_NUM], char letter) {
 }
 
 char get_letter () {
-  int index = 0; // use that different
-  return (letter_list.charAt(index));
+  return (letter_list.charAt(letter_index));
 }
 
 // called when interrupt start button and second round

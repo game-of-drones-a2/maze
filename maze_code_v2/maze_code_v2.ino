@@ -18,7 +18,7 @@ int pause;
 #define DEFAULT_LEFT_SPEED 1700
 #define DEFAULT_RIGHT_SPEED 1420
 #define DEFAULT_DELAY 100
-int left_right_delay[3];
+int left_delay_right[3];
 
 // set ports
 // BUTTONS
@@ -43,12 +43,14 @@ const int led_left = A5;
 const int led_right = A4;
 const int led_front = A3;
 
+int letter_index;
+
 #define MAX_DISTANCE 100 // max distance that sonar detects in cm
 #define SONAR_NUM 3
 
 #define MAX_WALL_DISTANCE 20
 #define END_DISTANCE 50
-#define CLOSE_DISTANCE 3
+#define CLOSE_DISTANCE 5
 
 #define LEFT 0
 #define STRAIGHT 1
@@ -84,13 +86,17 @@ void setup() {
   // initialisation of variables
   direction_letter = 'X';
   letter_list = String('X');
-  round_number = 1; // should be set to zero
-  pause = 1;
+  letter_index = 0;
+  round_number = 0; // should be set to zero
+  pause = 1; // should be 1
 
   // START BUTTON
   // can attatch interrupt with: attachInterrupt(digitalPinToInterrupt(pin), ISR, mode);
-  pinMode(button_start, INPUT); // or INPUT_PULLUP or INPUT_PULLDOWN
-  attachInterrupt(digitalPinToInterrupt(button_start), button_start_maze_pressed, RISING); // or use CHANGE
+  // pinMode(button_start, INPUT); // or INPUT_PULLUP or INPUT_PULLDOWN
+  // attachInterrupt(digitalPinToInterrupt(button_start), button_start_maze_pressed, RISING); // or use CHANGE
+
+  button_start_maze_pressed();
+  //start_maze();
 
 }
 
@@ -114,14 +120,14 @@ void loop() {
       // round two or higher
       if(direction_letter != 'A'){
         direction_letter = get_letter();
+        letter_index ++;
+        // if no letter is available = end of maze
       }
       direction_letter = analyse_where_to_go_2(distance_L_R_F, direction_letter);
     }
 
     Serial.print(direction_letter);
-    if (direction_letter == 'P') {
-      
-    }
+
     // File: servos_go_to.ino
     // perhaps do that in another therad, so it doesn't stop for every measurement
     switch (direction_letter) {
@@ -133,7 +139,6 @@ void loop() {
       case 'P': go_pause(); break; // end of the maze
       default: Serial.println("Nothing to do"); break;
     }
-    go(left_right_delay[0], left_right_delay[1], left_right_delay[2]);
   }
 }
 

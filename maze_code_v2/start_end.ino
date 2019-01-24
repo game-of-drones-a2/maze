@@ -4,7 +4,7 @@
 // no letter is saved here
 // this is working
 void start_maze(){
-  Serial.println("Start");
+  Serial.println("Start lalala");
   do{
     three_usonics();
     if ( (no_wall(distance_L_R_F[LEFT]) == false) || (no_wall(distance_L_R_F[STRAIGHT]) == false) || (no_wall(distance_L_R_F[RIGHT]) == false) ){

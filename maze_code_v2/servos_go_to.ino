@@ -43,21 +43,19 @@ void go_right(){
 // go straight, until a wall is detected (1st round 'R', second round 'L')
 void go_straight(int round_number){
   blink(0,0,1);
-    if(round_number == 1){
+  if(round_number == 1){
       do{
       go_correct();
       go(1700, 1420, 100);  
       three_usonics();
     }while(no_wall(distance_L_R_F[RIGHT])); 
-  }else{
-    if(round_number == 1){
+  }else if(round_number > 1){
       do{
       go_correct();
       go(1700, 1420, 100);  
       three_usonics();
-    }while(no_wall(distance_L_R_F[LEFT]));  
+      }while(no_wall(distance_L_R_F[LEFT]));  
   }
-  
 }
 
 void go_back(){
@@ -66,7 +64,7 @@ void go_back(){
     go_correct();
     go(1700, 1700, 1100);
     three_usonics();
-  }while(no_wall(distance_L_R_F[STRAIGHT));
+  }while(no_wall(distance_L_R_F[STRAIGHT]));
 }
 
 void go_pause(){
@@ -92,10 +90,15 @@ void go_ahead(){
 }
 
 // FIND VALUES HERE
+// eventually get go left, go right here
 void go_correct(){
-  while(close_wall(distance_L_R_F[LEFT]) == true){
-    left_delay_right[LEFT] += 5;
-    left_delay_right[RIGHT] -= 5;  
+ while(close_wall(distance_L_R_F[LEFT]) == true){
+    if((left_delay_right[LEFT] - 50) > 1500){
+      left_delay_right[LEFT] -= 50;
+    }
+    if((left_delay_right[RIGHT] + 50) < 1700){
+      left_delay_right[RIGHT] += 50; 
+    }  
     go(left_delay_right[LEFT], left_delay_right[RIGHT], left_delay_right[DELAY]);
     three_usonics();
   }
@@ -106,9 +109,7 @@ void go_correct(){
     three_usonics();
   }
   while(close_wall(distance_L_R_F[STRAIGHT]) == true){
-    left_delay_right[LEFT] += 5;
-    left_delay_right[RIGHT] -= 5;  
-    go(left_delay_right[LEFT], left_delay_right[RIGHT], left_delay_right[DELAY]);
+    go(100, 100, 100);
     three_usonics();
   }
 }
