@@ -43,6 +43,8 @@ void transfer_table () {
       }
     }
   }
+  Serial.println("Letter list");
+  Serial.print(letter_list);
 }
 
 // called in function transfer_table()

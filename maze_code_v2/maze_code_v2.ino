@@ -13,6 +13,7 @@ char direction_letter;
 int round_number;
 int distance_L_R_F[3];
 int pause;
+int interrupt;
 
 // SPEED OF ROBOT
 #define DEFAULT_LEFT_SPEED 1700
@@ -28,7 +29,6 @@ const int button_start = 2; // INTERRUPT
 // SERVOS
 const int servo_left = 5; // PWM 10
 const int servo_right = 6; // PWM 11
-
 
 // USONIC
 const int usonic_left_trigger = 4; // 4; -- was 2 before
@@ -74,39 +74,53 @@ void setup() {
   pinMode(led_right, OUTPUT);
   pinMode(led_front, OUTPUT);
 
-  // SERVOS
-  servoLeft.attach(servo_left);
-  servoRight.attach(servo_right);
-
   // SPEED
   left_delay_right[0] = DEFAULT_LEFT_SPEED;
   left_delay_right[1] = DEFAULT_DELAY;
   left_delay_right[2] = DEFAULT_RIGHT_SPEED;
 
   // initialisation of variables
-  direction_letter = 'X';
+  // direction_letter = 'X';
   letter_list = String('X');
   letter_index = 0;
-  round_number = 0; // should be set to zero
-  pause = 1; // should be 1
+  round_number = 0; // should be set to 0
+  pause = 1; // should be set to 1
+  interrupt = 0;
 
   // START BUTTON
   // can attatch interrupt with: attachInterrupt(digitalPinToInterrupt(pin), ISR, mode);
-  // pinMode(button_start, INPUT); // or INPUT_PULLUP or INPUT_PULLDOWN
-  // attachInterrupt(digitalPinToInterrupt(button_start), button_start_maze_pressed, RISING); // or use CHANGE
+  pinMode(button_start, INPUT); // or INPUT_PULLUP or INPUT_PULLDOWN
+  attachInterrupt(digitalPinToInterrupt(button_start), button_start_maze_pressed, HIGH); // or use CHANGE
 
-  button_start_maze_pressed();
-  //start_maze();
+  // button_start_maze_pressed();
+  // start_maze();
 
 }
 
 void loop() {
   // put your main code here, to run repeatedly
 
+  if (interrupt == 1){
+    delay(1000);
+    round_number ++;
+    Serial.print("button pressed" + round_number);
+    pause = 0;
+    if(round_number == 2){
+      Serial.print("Round 2");
+      transfer_table();
+    }
+    // SERVOS
+    servoLeft.attach(servo_left);
+    servoRight.attach(servo_right);
+    
+    start_maze(); // is working
+    interrupt = 0;
+  }
   if (pause == 1) {
     // do nothing
+      //Serial.print("Pause");
   } else {
-
+    //Serial.print("No Pause");
     // get data of all the three usonic sensors
     three_usonics(); 
 
@@ -121,7 +135,7 @@ void loop() {
       if(direction_letter != 'A'){
         direction_letter = get_letter();
         letter_index ++;
-        // if no letter is available = end of maze
+        // TODO if no letter is available = end of maze
       }
       direction_letter = analyse_where_to_go_2(distance_L_R_F, direction_letter);
     }

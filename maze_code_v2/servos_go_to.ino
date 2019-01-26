@@ -48,7 +48,8 @@ void go_straight(int round_number){
       go_correct();
       go(1700, 1420, 100);  
       three_usonics();
-    }while(no_wall(distance_L_R_F[RIGHT])); 
+      if(no_wall(distance_L_R_F[LEFT])) break;
+    }while(no_wall(distance_L_R_F[RIGHT])); // ???? TODO
   }else if(round_number > 1){
       do{
       go_correct();
@@ -71,6 +72,8 @@ void go_pause(){
   go(1500, 1500, 100);
   round_number ++;
   pause = 1;
+  servoLeft.detach();
+  servoRight.detach();
   blink(0,0,0);
   delay(500);
   blink(1,1,0);
@@ -78,9 +81,6 @@ void go_pause(){
   blink(0,0,0);
   delay(500);
   blink(1,1,0);
-
-  // servoLeft.detach();
-  // servoRight.detach();
 }
 
 void go_ahead(){
@@ -95,8 +95,8 @@ void go_correct(){
  while(close_wall(distance_L_R_F[LEFT]) == true){
     go(1520, 1520, 5); // turn a bit right    change to 1550 1550?
     // go(left_delay_right[LEFT], left_delay_right[RIGHT], left_delay_right[DELAY]);
-    Serial.print(left_delay_right[LEFT]);
-    Serial.print(left_delay_right[RIGHT]);
+    // Serial.print(left_delay_right[LEFT]);
+    // Serial.print(left_delay_right[RIGHT]);
     three_usonics();
   }
   while(close_wall(distance_L_R_F[RIGHT]) == true){
