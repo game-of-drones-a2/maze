@@ -9,7 +9,7 @@
 int three_usonics(){
   for(int i = 0; i < SONAR_NUM; i++){
     distance_L_R_F[i] = get_usonic_data(sonar[i]);
-    // Serial.println(distance_L_R_F[i]);
+    //Serial.println(distance_L_R_F[i]);
   }
 }
 

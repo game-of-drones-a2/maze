@@ -19,8 +19,7 @@ char analyse_where_to_go_1(int distance_L_R_F[SONAR_NUM]){
 }
 
 void set_letter (char direction_letter){ // is it like append? test that func!
-  //if(direction_letter != 'A'){
-    letter_list.setCharAt(letter_list.length(), direction_letter); 
-  //}
+    letter_list.concat(direction_letter); 
+    Serial.println("Letterlist: " + letter_list);
 }
 

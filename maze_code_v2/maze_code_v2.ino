@@ -24,7 +24,6 @@ int left_delay_right[3];
 // set ports
 // BUTTONS
 const int button_start = 2; // INTERRUPT
-// const int button_end = 3; // INTERRUPT
 
 // SERVOS
 const int servo_left = 5; // PWM 10
@@ -45,10 +44,10 @@ const int led_front = A3;
 
 int letter_index;
 
-#define MAX_DISTANCE 100 // max distance that sonar detects in cm
+#define MAX_DISTANCE 70 // max distance that sonar detects in cm
 #define SONAR_NUM 3
 
-#define MAX_WALL_DISTANCE 20
+#define MAX_WALL_DISTANCE 15
 #define END_DISTANCE 50
 #define CLOSE_DISTANCE 5
 
@@ -81,7 +80,7 @@ void setup() {
 
   // initialisation of variables
   // direction_letter = 'X';
-  letter_list = String('X');
+  letter_list;
   letter_index = 0;
   round_number = 0; // should be set to 0
   pause = 1; // should be set to 1
@@ -101,12 +100,11 @@ void loop() {
   // put your main code here, to run repeatedly
 
   if (interrupt == 1){
-    delay(1000);
     round_number ++;
-    Serial.print("button pressed" + round_number);
+    Serial.print("button pressed ");
+    Serial.println(round_number);
     pause = 0;
     if(round_number == 2){
-      Serial.print("Round 2");
       transfer_table();
     }
     // SERVOS
@@ -118,9 +116,7 @@ void loop() {
   }
   if (pause == 1) {
     // do nothing
-      //Serial.print("Pause");
   } else {
-    //Serial.print("No Pause");
     // get data of all the three usonic sensors
     three_usonics(); 
 
@@ -140,7 +136,7 @@ void loop() {
       direction_letter = analyse_where_to_go_2(distance_L_R_F, direction_letter);
     }
 
-    Serial.print(direction_letter);
+    // Serial.print(direction_letter);
 
     // File: servos_go_to.ino
     // perhaps do that in another therad, so it doesn't stop for every measurement
