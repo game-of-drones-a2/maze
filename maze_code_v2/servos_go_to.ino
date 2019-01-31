@@ -11,8 +11,14 @@ go pause - left: 1500 right: 1500
 
 // when changing all values, we might make while instead of do while(true)
 // 1st: sensors, 2nd: break condition, 3rd: go
+// sensor is done in algorithm (be aware!)
 
 void go(int speed_left, int speed_right, int delay_time){
+  /*three_usonics();
+  if ( (end_wall(distance_L_R_F[LEFT]) == true) && (end_wall(distance_L_R_F[STRAIGHT]) == true) && (end_wall(distance_L_R_F[RIGHT]) == true) ){
+      direction_letter = 'P'; // end of maze = pause
+      go_pause();
+  }*/
   servoLeft.writeMicroseconds(speed_left);
   servoRight.writeMicroseconds(speed_right);
   delay(delay_time);

@@ -48,7 +48,7 @@ int letter_index;
 #define SONAR_NUM 3
 
 #define MAX_WALL_DISTANCE 15
-#define END_DISTANCE 50
+#define END_DISTANCE 30
 #define CLOSE_DISTANCE 5
 
 #define LEFT 0
