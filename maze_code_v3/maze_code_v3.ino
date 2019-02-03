@@ -10,10 +10,24 @@ Servo servoRight;
 
 String letter_list;
 char direction_letter;
+char last_direction_letter;
 int round_number;
 int distance_L_R_F[3];
 int pause;
 int interrupt;
+
+// DELAY with millis()
+// https://canvas.instructure.com/courses/1054116/pages/arduino-millis-and-simpletimer-instead-of-delay-and-blocking
+#define DELAY_AHEAD 100
+#define DELAY_LEFT 100
+#define DELAY_STRAIGH 100
+#define DELAY_RIGHT 100
+#define DELAY_BACK 100
+#define DELAY_DEFAULT 100
+#define DELAY_CORRECT 5
+unsigned long delay_time = DELAY_DEFAULT;
+unsigned long current_time;
+unsigned long last_time;
 
 // SPEED OF ROBOT
 #define DEFAULT_LEFT_SPEED 1700
@@ -43,13 +57,15 @@ const int led_right = A4;
 const int led_front = A3;
 
 int letter_index;
+char list_letter;
+char usonic_letter;
 
 #define MAX_DISTANCE 70 // max distance that sonar detects in cm
 #define SONAR_NUM 3
 
 #define MAX_WALL_DISTANCE 15
 #define END_DISTANCE 30
-#define CLOSE_DISTANCE 5
+#define CLOSE_DISTANCE 10
 
 #define LEFT 0
 #define STRAIGHT 1
@@ -78,13 +94,18 @@ void setup() {
   left_delay_right[1] = DEFAULT_DELAY;
   left_delay_right[2] = DEFAULT_RIGHT_SPEED;
 
-  // initialisation of variables
+  // DELAY with millis()
+  current_time = millis();
+  last_time = current_time;
+
+  // Initialise variables
   // direction_letter = 'X';
-  letter_list;
+  // letter_list;
+  last_direction_letter = 'X';
   letter_index = 0;
-  round_number = 0; // should be set to 0
   pause = 1; // should be set to 1
   interrupt = 0;
+  round_number = 0; // should be set to 0
 
   // START BUTTON
   // can attatch interrupt with: attachInterrupt(digitalPinToInterrupt(pin), ISR, mode);
@@ -107,7 +128,9 @@ void loop() {
     // SERVOS
     servoLeft.attach(servo_left);
     servoRight.attach(servo_right);
-    
+
+    delay(500);
+        
     start_maze(); // is working
     interrupt = 0;
   }
@@ -116,36 +139,29 @@ void loop() {
   } else {
     // get data of all the three usonic sensors
     three_usonics(); 
-
-    if (round_number == 1) {
-      // round one
-      direction_letter = analyse_where_to_go_1(distance_L_R_F);
-      if (direction_letter != 'A') {
-        set_letter(direction_letter);
-      }
-    } else if (round_number > 1) {
-      // round two or higher
-      if(direction_letter != 'A'){
-        direction_letter = get_letter();
-        letter_index ++;
-        // TODO if no letter is available = end of maze
-      }
-      direction_letter = analyse_where_to_go_2(distance_L_R_F, direction_letter);
-    }
-
+    direction_letter = analyse_where_to_go_1(distance_L_R_F);
+    
     // Serial.print(direction_letter);
 
     // File: servos_go_to.ino
     // perhaps do that in another therad, so it doesn't stop for every measurement
-    switch (direction_letter) {
-      case 'A': go_ahead(); break; // go ahead, when nothing else
-      case 'L': go_left(); break; // turn about 90deg
-      case 'R': go_right(); break; // turn about 90deg
-      case 'S': go_straight(round_number); break; // go straight: when no right wall in 1 round, when no left wall in second round
-      case 'B': go_back(); break; // turn about 180deg
-      case 'P': go_pause(); break; // end of the maze
-      default: Serial.println("Nothing to do"); break;
-    }
+    if (last_direction_letter != direction_letter){
+      if (direction_letter != 'A') {
+        set_letter(direction_letter);
+      }      
+        last_direction_letter = direction_letter;
+        switch (direction_letter) {
+          case 'P': go_pause(); break; // end of the maze
+          case 'C': go_correct(); break; // need to correct
+          case 'L': go_left(); break; // turn about 90deg
+          case 'S': go_straight(round_number); break; // go straight: when no right wall in 1 round, when no left wall in second round
+          case 'A': go_ahead(); break; // go ahead, when nothing else
+          case 'R': go_right(); break; // turn about 90deg
+          case 'B': go_back(); break; // turn about 180deg
+          default: Serial.println("Nothing to do"); break;
+        }  
+        
+    }   
   }
 }
 
