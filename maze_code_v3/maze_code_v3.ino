@@ -52,8 +52,8 @@ const int usonic_right_trigger = 9;
 const int usonic_right_echo = 10; // 9;
 
 // LEDs
-const int led_left = A5;
-const int led_right = A4;
+const int led_left = A5; // green
+const int led_right = A4; //
 const int led_front = A3;
 
 int letter_index;
