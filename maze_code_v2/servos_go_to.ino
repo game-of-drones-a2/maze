@@ -95,7 +95,28 @@ void go_ahead(){
 // changed it here, maybe while instead of if is better
 // TODO: find out if "if" or "else if" is better
 void go_correct(){
+<<<<<<< HEAD
+ while(close_wall(distance_L_R_F[LEFT]) == true){
+   // if((left_delay_right[LEFT] - 50) > 1500){ //previously -50
+      left_delay_right[LEFT] -= 0;
+    //}
+    //if((left_delay_right[RIGHT] + 50) < 1700){  //previously +50
+      left_delay_right[RIGHT] += 180; 
+    //}  
+    go(left_delay_right[LEFT], left_delay_right[RIGHT], left_delay_right[DELAY]);
+    three_usonics();
+  }
+  while(close_wall(distance_L_R_F[RIGHT]) == true){
+    left_delay_right[LEFT] += 5;
+    left_delay_right[RIGHT] -= 5;  
+    go(left_delay_right[LEFT], left_delay_right[RIGHT], left_delay_right[DELAY]);
+    three_usonics();
+  }
+  while(close_wall(distance_L_R_F[STRAIGHT]) == true){
+    go(100, 100, 100);
+=======
   while (close_wall(distance_L_R_F[LEFT]) || close_wall(distance_L_R_F[RIGHT]) || close_wall(distance_L_R_F[STRAIGHT])){
+>>>>>>> 54029b89a3dc061aeedbf5de62d0f495077762e6
     three_usonics();
     if (close_wall(distance_L_R_F[RIGHT]) == true){   
       go(1520, 1520, 5); // turn a bit right    change to 1550 1550? 
@@ -106,5 +127,3 @@ void go_correct(){
     }
   }
 }
-
-
