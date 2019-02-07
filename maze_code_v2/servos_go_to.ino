@@ -93,12 +93,12 @@ void go_ahead(){
 // eventually get go left, go right here
 void go_correct(){
  while(close_wall(distance_L_R_F[LEFT]) == true){
-    if((left_delay_right[LEFT] - 50) > 1500){
-      left_delay_right[LEFT] -= 50;
-    }
-    if((left_delay_right[RIGHT] + 50) < 1700){
-      left_delay_right[RIGHT] += 50; 
-    }  
+   // if((left_delay_right[LEFT] - 50) > 1500){ //previously -50
+      left_delay_right[LEFT] -= 0;
+    //}
+    //if((left_delay_right[RIGHT] + 50) < 1700){  //previously +50
+      left_delay_right[RIGHT] += 180; 
+    //}  
     go(left_delay_right[LEFT], left_delay_right[RIGHT], left_delay_right[DELAY]);
     three_usonics();
   }
@@ -113,5 +113,3 @@ void go_correct(){
     three_usonics();
   }
 }
-
-
