@@ -9,10 +9,11 @@ go back - left: 1700, right: 1700, delay: 1100
 go pause - left: 1500 right: 1500
 */
 
+// when changing all values, we might make while instead of do while(true)
+// 1st: sensors, 2nd: break condition, 3rd: go
+// sensor is done in algorithm (be aware!)
+
 void go(int speed_left, int speed_right, int delay_time){
-  left_delay_right[LEFT] = speed_left;
-  left_delay_right[DELAY] = speed_right;
-  left_delay_right[RIGHT] = delay_time;
   servoLeft.writeMicroseconds(speed_left);
   servoRight.writeMicroseconds(speed_right);
   delay(delay_time);
@@ -34,7 +35,7 @@ void go_right(){
   go(1700, 1420, 300); // go a bit to the front
   do{
     go_correct();
-    go(1700, 1700, 250); // turn a bit left
+    go(1700, 1700, 250); // turn a bit right
     go(1700, 1420, 300); // go a bit to the front
     three_usonics();
   }while(no_wall(distance_L_R_F[RIGHT]));
@@ -48,7 +49,8 @@ void go_straight(int round_number){
       go_correct();
       go(1700, 1420, 100);  
       three_usonics();
-    }while(no_wall(distance_L_R_F[RIGHT])); 
+      if(no_wall(distance_L_R_F[LEFT])) break; // somewhere else!!!!!
+    }while(no_wall(distance_L_R_F[RIGHT])); // ???? TODO
   }else if(round_number > 1){
       do{
       go_correct();
@@ -61,7 +63,7 @@ void go_straight(int round_number){
 void go_back(){
   blink(0,0,0);
   do{
-    go_correct();
+    go_correct(); // maybe
     go(1700, 1700, 1100);
     three_usonics();
   }while(no_wall(distance_L_R_F[STRAIGHT]));
@@ -71,6 +73,8 @@ void go_pause(){
   go(1500, 1500, 100);
   round_number ++;
   pause = 1;
+  servoLeft.detach();
+  servoRight.detach();
   blink(0,0,0);
   delay(500);
   blink(1,1,0);
@@ -78,9 +82,6 @@ void go_pause(){
   blink(0,0,0);
   delay(500);
   blink(1,1,0);
-
-  // servoLeft.detach();
-  // servoRight.detach();
 }
 
 void go_ahead(){
@@ -91,7 +92,10 @@ void go_ahead(){
 
 // FIND VALUES HERE
 // eventually get go left, go right here
+// changed it here, maybe while instead of if is better
+// TODO: find out if "if" or "else if" is better
 void go_correct(){
+<<<<<<< HEAD
  while(close_wall(distance_L_R_F[LEFT]) == true){
    // if((left_delay_right[LEFT] - 50) > 1500){ //previously -50
       left_delay_right[LEFT] -= 0;
@@ -110,6 +114,16 @@ void go_correct(){
   }
   while(close_wall(distance_L_R_F[STRAIGHT]) == true){
     go(100, 100, 100);
+=======
+  while (close_wall(distance_L_R_F[LEFT]) || close_wall(distance_L_R_F[RIGHT]) || close_wall(distance_L_R_F[STRAIGHT])){
+>>>>>>> 54029b89a3dc061aeedbf5de62d0f495077762e6
     three_usonics();
+    if (close_wall(distance_L_R_F[RIGHT]) == true){   
+      go(1520, 1520, 5); // turn a bit right    change to 1550 1550? 
+    }else if (close_wall(distance_L_R_F[RIGHT]) == true){
+      go(1470, 1470, 5); // turn a bit left  
+    }else if(close_wall(distance_L_R_F[STRAIGHT]) == true){
+      go(1300, 1580, 100);
+    }
   }
 }
