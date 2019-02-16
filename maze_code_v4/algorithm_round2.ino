@@ -1,17 +1,17 @@
 // algorithm file for round 2
 // nothing with servos / sensors here
 
-char analyse_where_to_go_2(int distance_L_R_F[SONAR_NUM], char letter) {
+char analyse_where_to_go_2(int distance[SONAR_NUM], char letter) {
 
   /* LETTER L */
   if (letter == 'L') {
-    if (no_wall(distance_L_R_F[LEFT]) == true) {
+    if (no_wall(distance[LEFT]) == true) {
       return 'L';
     } else return 'A';
   /* LETTER S */
   } else if (letter == 'S') {
-    if (no_wall(distance_L_R_F[STRAIGHT]) == true) {
-      if (no_wall(distance_L_R_F[RIGHT]) == true) {
+    if (no_wall(distance[STRAIGHT]) == true) {
+      if (no_wall(distance[RIGHT]) == true) {
         return 'S';
       } else {
         return 'A';
@@ -19,7 +19,7 @@ char analyse_where_to_go_2(int distance_L_R_F[SONAR_NUM], char letter) {
     } else return 'A'; // maybe dangerous
    /* LETTER R */
   } else if (letter == 'R') {
-    if (no_wall(distance_L_R_F[LEFT]) == true) {
+    if (no_wall(distance[LEFT]) == true) {
       return 'R';
     } else return 'A';
   } else return 'A'; // was A before
@@ -79,6 +79,3 @@ char get_transfer_letter(char dec, char inc) {
   }
   return transf;
 }
-
-
-

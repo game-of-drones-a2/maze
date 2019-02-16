@@ -13,92 +13,78 @@ go pause - left: 1500 right: 1500
 // 1st: sensors, 2nd: break condition, 3rd: go
 // sensor is done in algorithm (be aware!)
 
-void set_servos(int speed_left, int speed_right, int delay_time){
+void set_servos(int speed_left, int speed_right){
   servoLeft.writeMicroseconds(speed_left);
   servoRight.writeMicroseconds(speed_right);
   delay(5);
 }
 
 void go_left(){ 
+  blink(1,1,0);
+  set_servos(1400, 1400); // turn a bit left
+}
+
+void go_left_m(){
+  blink(1,0,1);
+  if(round_number = 1){
+    set_servos(1400, 1400);  
+  }else{
+    correct_forward();
+  }
+}
+
+void go_left_n(){
   blink(1,0,0);
- // do{
-    // set_servos(1700, 1420, 300); // go a bit to the front 
-    set_servos(1400, 1400, 250); // turn a bit left
-   // three_usonics();
- // }while(no_wall(distance_L_R_F[LEFT]));
+  if(round_number = 1){
+    set_servos(1400, 1400);  
+  }else{
+    correct_forward();
+  }
 }
 
 // go straight, until a wall is detected (1st round 'R', second round 'L')
 void go_straight(int round_number){
-  blink(0,0,1);
+  blink(0,1,1);
   if(round_number == 1){
-    //  do{
-      set_servos(1650, 1430, 100);  
-     // three_usonics();
-      //if(no_wall(distance_L_R_F[LEFT])) break; // somewhere else!!!!!
-    //}while(no_wall(distance_L_R_F[RIGHT])); // ???? TODO
+    set_servos(1650, 1430);  
   }else if(round_number > 1){
-      //do{
-      set_servos(1650, 1430, 100);  
-     // three_usonics();
-      //}while(no_wall(distance_L_R_F[LEFT]));  
+      set_servos(1650, 1430);  
   }
 }
 
-void go_right(){
+void go_ahead(){
   blink(0,1,0);
-  //do{
-    set_servos(1600, 1600, 250); // turn a bit right
-    // three_usonics();
-  //}while(no_wall(distance_L_R_F[RIGHT]));
+  set_servos(1650, 1430);
+}
+
+void go_right(){
+  blink(0,0,1);
+  if(round_number = 1){
+    set_servos(1600, 1600);  
+  }else{
+    correct_forward();
+  }
 }
 
 void go_back(){
   blink(0,0,0);
-  //do{
-    //go_correct(); // maybe
-    set_servos(1700, 1700, 1100);
-    //three_usonics();
-  //}while(no_wall(distance_L_R_F[STRAIGHT]));
+  set_servos(1700, 1700);
 }
 
+// end
 void go_pause(){
-  set_servos(1500, 1500, 100);
+  set_servos(1500, 1500);
   round_number ++;
   pause = 1;
   servoLeft.detach();
   servoRight.detach();
   blink(0,0,0);
   delay(500);
-  blink(1,1,0);
+  blink(1,0,0);
   delay(500);
-  blink(0,0,0);
+  blink(0,1,0);
   delay(500);
-  blink(1,1,0);
-}
-
-void go_ahead(){
+  blink(0,0,1);
+  delay(500);
   blink(1,1,1);
-  set_servos(1650, 1430, 100);
 }
-
-// FIND VALUES HERE
-// eventually get go left, go right here
-// changed it here, maybe while instead of if is better
-// TODO: find out if "if" or "else if" is better
-void go_correct(){
-//  while (close_wall(distance_L_R_F[LEFT]) || close_wall(distance_L_R_F[RIGHT]) || close_wall(distance_L_R_F[STRAIGHT])){
-//    three_usonics();
-    if (close_wall(distance_L_R_F[LEFT]) == true){   
-      set_servos(1540, 1540, 5); // turn a bit right    change to 1550 1550? 
-    }
-    if (close_wall(distance_L_R_F[RIGHT]) == true){
-      set_servos(1460, 1460, 5); // turn a bit left  
-    }
-    if(close_wall(distance_L_R_F[STRAIGHT]) == true){
-      set_servos(1300, 1570, 500);
-    }
-  //}
-}
-
-

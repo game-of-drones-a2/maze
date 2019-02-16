@@ -5,11 +5,14 @@
 // maybe something bigger than int? use uint? 8, 16, 32? how sensitive are the sensors? do we need it that sensitive?
 // we could do int if using mm, or should use float?
 
+
+// TODO TODO TODO: find out if true and false is not in the wrong way
+
 // ********** GET DATA OF ALL USONIC SENSORS **********
 int three_usonics(){
   for(int i = 0; i < SONAR_NUM; i++){
-    distance_L_R_F[i] = get_usonic_data(sonar[i]);
-    //Serial.println(distance_L_R_F[i]);
+    distance[i] = get_usonic_data(sonar[i]);
+    //Serial.println(distance[i]);
   }
 }
 
@@ -23,11 +26,11 @@ int get_usonic_data(NewPing sonar){
 // ********** NO WALL DETECTED **********
 // no wall is detected, when the distance is either bigger than MAX_WALL_DISTANCE
 // or if there is no wall detected
-bool no_wall(int distance){
+bool wall(int distance){
   if (distance > MAX_WALL_DISTANCE || distance == 0){
-    return true; // no wall
+    return false; // no wall
   }
-  return false; // wall
+  return true; // wall
 }
 
 // ********** END OF THE LABYRINTH **********
@@ -49,5 +52,3 @@ bool close_wall(int distance){
   }
   return false; // no close wall
 }
-
-

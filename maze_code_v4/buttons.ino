@@ -10,15 +10,21 @@ void button_start_maze_pressed (){
 // this needs to be done in all rounds
 // no letter is saved here
 // this is working
+// set_servos(1650, 1430);
 void start_maze(){
+  
+  // SERVOS
+  servoLeft.attach(servo_left);
+  servoRight.attach(servo_right);
+  delay(500);
+
+  blink(0,1,0);
+  set_servos(DEFAULT_LEFT_SPEED, DEFALUT_RIGHT_SPEED);
   while(true){
     three_usonics();
-    if ( (no_wall(distance_L_R_F[LEFT]) == false) || (no_wall(distance_L_R_F[STRAIGHT]) == false) || (no_wall(distance_L_R_F[RIGHT]) == false) ){
+    if (wall(distance[LEFT]) || wall(distance[STRAIGHT] || wall(distance[RIGHT])){
       // if there is any wall detected
       break;
     }
-    go_ahead();
-    delay(DELAY_AHEAD);
   }
 }
-
