@@ -13,67 +13,56 @@ go pause - left: 1500 right: 1500
 // 1st: sensors, 2nd: break condition, 3rd: go
 // sensor is done in algorithm (be aware!)
 
-void set_servos(int speed_left, int speed_right){
-  servoLeft.writeMicroseconds(speed_left);
-  servoRight.writeMicroseconds(speed_right);
+void set_servos(){
+  servoLeft.writeMicroseconds(servo_pwm[LEFT]);
+  servoRight.writeMicroseconds(servo_pwm[RIGHT]);
   delay(5);
 }
 
-void go_left(){ 
+void go_left(){     //need to feed values less than 1500
   blink(1,1,0);
-  set_servos(1400, 1400); // turn a bit left
-}
-
-void go_left_m(){
-  blink(1,0,1);
-  if(round_number = 1){
-    set_servos(1400, 1400);  
-  }else{
-    correct_forward();
-  }
-}
-
-void go_left_n(){
-  blink(1,0,0);
-  if(round_number = 1){
-    set_servos(1400, 1400);  
-  }else{
-    correct_forward();
-  }
+  servo_pwm[LEFT] = DEFAULT_RIGHT_SPEED;
+  servo_pwm[RIGHT] = DEFAULT_RIGHT_SPEED;
 }
 
 // go straight, until a wall is detected (1st round 'R', second round 'L')
 void go_straight(int round_number){
   blink(0,1,1);
   if(round_number == 1){
-    set_servos(1650, 1430);  
+    servo_pwm[LEFT] = DEFAULT_LEFT_SPEED;
+    servo_pwm[RIGHT] = DEFAULT_RIGHT_SPEED;  
   }else if(round_number > 1){
-      set_servos(1650, 1430);  
+    servo_pwm[LEFT] = DEFAULT_LEFT_SPEED;
+    servo_pwm[RIGHT] = DEFAULT_RIGHT_SPEED; 
   }
 }
 
 void go_ahead(){
   blink(0,1,0);
-  set_servos(1650, 1430);
+  servo_pwm[LEFT] = DEFAULT_LEFT_SPEED;
+  servo_pwm[RIGHT] = DEFAULT_RIGHT_SPEED;
 }
 
-void go_right(){
+void go_right(){  //need to feed values greater tgan 1500
   blink(0,0,1);
   if(round_number = 1){
-    set_servos(1600, 1600);  
+    servo_pwm[LEFT] = DEFAULT_LEFT_SPEED;
+    servo_pwm[RIGHT] = DEFAULT_LEFT_SPEED;  
   }else{
-    correct_forward();
+    servo_pwm[LEFT] = DEFAULT_LEFT_SPEED;
+    servo_pwm[RIGHT] = DEFAULT_LEFT_SPEED;  
+    correct_forward(); // TODO
   }
 }
 
 void go_back(){
   blink(0,0,0);
-  set_servos(1700, 1700);
+  servo_pwm[LEFT] = DEFAULT_RIGHT_SPEED;
+  servo_pwm[RIGHT] = DEFAULT_RIGHT_SPEED;  
 }
 
 // end
 void go_pause(){
-  set_servos(1500, 1500);
   round_number ++;
   pause = 1;
   servoLeft.detach();

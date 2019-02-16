@@ -7,8 +7,10 @@
 Servo servoLeft;
 Servo servoRight;
 
-// Controllers
+// variables - try to put them to functions - global is always bad
 
+
+// Controllers
 double Setpoint, Input, Output;
 //Specify the links and initial tuning parameters
 double Kp = 2, Ki = 5, Kd = 1;
@@ -17,7 +19,6 @@ PID offsetPID(&Input, &Output, &Setpoint, Kp, Ki, Kd, DIRECT);
 PID anglePID(&Input, &Output, &Setpoint, Kp, Ki, Kd, DIRECT);
 PID forwardPID(&Input, &Output, &Setpoint, Kp, Ki, Kd, DIRECT);
 
-// variables - try to put them to functions - global is always bad
 
 String letter_list;
 char direction_letter;
@@ -27,25 +28,19 @@ int distance[3];
 int pause;
 int interrupt;
 
-// DELAY with millis()
-// https://canvas.instructure.com/courses/1054116/pages/arduino-millis-and-simpletimer-instead-of-delay-and-blocking
-#define DELAY_AHEAD 100
-#define DELAY_LEFT 100
-#define DELAY_STRAIGH 100
-#define DELAY_RIGHT 100
-#define DELAY_BACK 100
-#define DELAY_DEFAULT 100
-#define DELAY_CORRECT 5
-unsigned long delay_time = DELAY_DEFAULT;
-unsigned long current_time;
-unsigned long last_time;
-
 // SPEED OF ROBOT for going straight
 #define DEFAULT_LEFT_SPEED 1650
-#define DEFAULT_RIGHT_SPEED 1420
-int left_delay_right[3];
+#define MAX_LEFT_SPEED 1700
+#define MIN_LEFT_SPEED 1550
 
-// set ports
+#define DEFAULT_RIGHT_SPEED 1430
+#define MAX_RIGHT_SPEED 1300
+#define MIN_RIGHT_SPEED 1450
+
+int servo_pwm[2];
+int servo_pwm_old[2];
+
+// ********** PINS *********
 // BUTTONS
 const int button_start = 2; // INTERRUPT
 
@@ -54,44 +49,42 @@ const int servo_left = 5; // PWM 10
 const int servo_right = 6; // PWM 11
 
 // USONIC
-const int usonic_left_trigger = A1; // 4; -- was 4 before
-const int usonic_left_echo = A0; // 3;  -- was 3 before
-const int usonic_middle_trigger = 4; // 8;
-const int usonic_middle_echo = 3; //7;
-const int usonic_right_trigger = 7; // 9;
-const int usonic_right_echo = 8; // 9;
+const int usonic_left_trigger = 4; // 4; -- was 4 before
+const int usonic_left_echo = 3; // 3;  -- was 3 before
+const int usonic_front_trigger = 8; // 8;
+const int usonic_front_echo = 7; //7;
+const int usonic_right_trigger = A0; // 9;
+const int usonic_right_echo = A1; // 9;
 
 // LEDs
-const int led_left = A5;  // A5;
-const int led_right = 1; // A4;
-const int led_front = 0; // A3;;
+const int led_left = A4;  // A5;
+const int led_right = A3; // A4;
+const int led_front = A5; // A3;
 
 int letter_index;
 char list_letter;
 char usonic_letter;
 
-#define MAX_DISTANCE 70 // max distance that sonar detects in cm
 #define SONAR_NUM 3
 
+#define MAX_DISTANCE 70 // max distance that sonar detects in cm
 #define MAX_WALL_DISTANCE 15
 #define END_DISTANCE 30
-#define CLOSE_DISTANCE 10
+#define CLOSE_DISTANCE 5 // this is just in case of emergency
 
 #define LEFT 0
-#define STRAIGHT 1
-#define RIGHT 2
+#define RIGHT 1
+#define FRONT 2
 #define BACK 3
 
 NewPing sonar[SONAR_NUM] = { // NewPing object array
   NewPing(usonic_left_trigger, usonic_left_echo, MAX_DISTANCE),
-  NewPing(usonic_middle_trigger, usonic_middle_echo, MAX_DISTANCE),
-  NewPing(usonic_right_trigger, usonic_right_echo, MAX_DISTANCE)
+  NewPing(usonic_right_trigger, usonic_right_echo, MAX_DISTANCE),
+  NewPing(usonic_front_trigger, usonic_front_echo, MAX_DISTANCE)
 };
 
 void setup() {
-  // put your setup code here, to run once:
-
-  Serial.begin(9600); // need that for usonic newPing
+  Serial.begin(9600);
 
   // LEDs
   pinMode(led_left, OUTPUT);
@@ -99,31 +92,26 @@ void setup() {
   pinMode(led_front, OUTPUT);
 
   // SPEED
-  left_delay_right[0] = DEFAULT_LEFT_SPEED;
-  left_delay_right[2] = DEFAULT_RIGHT_SPEED;
-
-  // DELAY with millis()
-  current_time = millis();
-  last_time = current_time;
+  servo_pwm[LEFT] = DEFAULT_LEFT_SPEED;
+  servo_pwm[RIGHT] = DEFAULT_RIGHT_SPEED;
 
   // Initialise variables
   // direction_letter = 'X';
   // letter_list;
   last_direction_letter = 'X';
-  letter_index = 0;
+  letter_index = 0; // should be set to zero
   pause = 1; // should be set to 1
-  interrupt = 0;
+  interrupt = 0; // should be set to 0
   round_number = 0; // should be set to 0
 
   // START BUTTON
-  // can attatch interrupt with: attachInterrupt(digitalPinToInterrupt(pin), ISR, mode);
+  // tutorial: attachInterrupt(digitalPinToInterrupt(pin), ISR, mode);
   pinMode(button_start, INPUT); // or INPUT_PULLUP or INPUT_PULLDOWN
   attachInterrupt(digitalPinToInterrupt(button_start), button_start_maze_pressed, HIGH); // or use CHANGE
 
 }
 
 void loop() {
-  // put your main code here, to run repeatedly
 
   if (interrupt == 1) {
     round_number ++;
@@ -133,7 +121,7 @@ void loop() {
     if (round_number == 2) {
       transfer_table();
     }
-    start_maze(); // is working
+    start_maze();
     interrupt = 0;
   }
   if (pause == 1) {
@@ -141,29 +129,38 @@ void loop() {
   } else {
     // get data of all the three usonic sensors
     three_usonics();
-    direction_letter = analyse_where_to_go_1(distance);
+    Serial.println(distance[0]);
+    Serial.println(distance[1]);
+    Serial.println(distance[2]);
+    Serial.println(" ---- ");
+    direction_letter = analyse_where_to_go_1(distance); // different in number 2 !?
 
-    // Serial.print(direction_letter);
-
-    // File: servos_go_to.ino
-    // perhaps do that in another therad, so it doesn't stop for every measurement
+    // if direction changes
     if (last_direction_letter != direction_letter) {
-      if (direction_letter != 'A' && direction_letter != 'C') { // AND or OR ?!
+      Serial.print(direction_letter);
+      if (direction_letter != 'A' && direction_letter != 'C') { // neither a nor c
         set_letter(direction_letter);
       }
-      last_direction_letter = direction_letter;
       switch (direction_letter) {
         case 'A': go_ahead(); break; // go ahead, when nothing else
-        case 'C': correct_bumping(); break; // need to correct
+        case 'C': correct_bumping(); break; // emergency case
         case 'L': go_left(); break; // turn about 90deg
-        case 'M': go_left_m(); break;
-        case 'N': go_left_n(); break;
+        case 'M': go_left(); break;
+        case 'N': go_left(); break;
         case 'S': go_straight(round_number); break; // go straight: when no right wall in 1 round, when no left wall in second round
         case 'R': go_right(); break; // turn about 90deg
         case 'B': go_back(); break; // turn about 180deg
         case 'P': go_pause(); break; // end of the maze
         default: Serial.println("Nothing to do"); break;
       }
+      last_direction_letter = direction_letter;
+    }
+    // TODO maybe do here something with controlling ?!
+    if (servo_pwm[LEFT] != servo_pwm_old[LEFT] || servo_pwm[RIGHT] != servo_pwm_old[RIGHT]){
+      // if either of them has changed
+      set_servos();
+      servo_pwm_old[LEFT] = servo_pwm[LEFT];
+      servo_pwm_old[RIGHT] = servo_pwm[RIGHT];
     }
   }
 }

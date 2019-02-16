@@ -18,11 +18,13 @@ void start_maze(){
   servoRight.attach(servo_right);
   delay(500);
 
-  blink(0,1,0);
-  set_servos(DEFAULT_LEFT_SPEED, DEFALUT_RIGHT_SPEED);
+  blink(1,1,1);
+  servo_pwm[LEFT] = DEFAULT_LEFT_SPEED;
+  servo_pwm[RIGHT] = DEFAULT_RIGHT_SPEED; 
+  set_servos();
   while(true){
     three_usonics();
-    if (wall(distance[LEFT]) || wall(distance[STRAIGHT] || wall(distance[RIGHT])){
+    if (wall(distance[LEFT]) || wall(distance[FRONT]) || wall(distance[RIGHT])){
       // if there is any wall detected
       break;
     }
