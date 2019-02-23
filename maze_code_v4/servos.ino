@@ -35,8 +35,8 @@ void set_servo_values() {
 
 void set_left() {    //need to feed values less than 1500
   blink(1, 1, 0);
-  servo_pwm[LEFT] = DEFAULT_RIGHT_SPEED;
-  servo_pwm[RIGHT] = DEFAULT_RIGHT_SPEED;
+  servo_pwm[LEFT] = 1550; //DEFAULT_RIGHT_SPEED;
+  servo_pwm[RIGHT] = 1400; //DEFAULT_RIGHT_SPEED;
 }
 
 // go straight, until a wall is detected (1st round 'R', second round 'L')
@@ -59,14 +59,14 @@ void set_ahead() {
 
 void set_right() { //need to feed values greater tgan 1500
   blink(0, 0, 1);
-  if (round_number = 1) {
-    servo_pwm[LEFT] = DEFAULT_LEFT_SPEED;
-    servo_pwm[RIGHT] = DEFAULT_LEFT_SPEED;
-  } else {
+ // if (round_number = 1) {
+    servo_pwm[LEFT] = 1650; // DEFAULT_LEFT_SPEED;
+    servo_pwm[RIGHT] = 1480; //DEFAULT_LEFT_SPEED;
+ /* } else {
     servo_pwm[LEFT] = DEFAULT_LEFT_SPEED;
     servo_pwm[RIGHT] = DEFAULT_LEFT_SPEED;
     correct_forward(); // TODO
-  }
+  }*/
 }
 
 void set_back() {
@@ -77,7 +77,6 @@ void set_back() {
 
 // end
 void set_pause() {
-  round_number ++;
   pause = 1;
   servoLeft.detach();
   servoRight.detach();

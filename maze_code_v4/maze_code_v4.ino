@@ -17,8 +17,8 @@
 
 #define MAX_DISTANCE 70 // max distance that sonar detects in cm
 #define MAX_WALL_DISTANCE 15
-#define END_DISTANCE 30
-#define CLOSE_DISTANCE 5 // this is just in case of emergency
+#define END_DISTANCE 40
+#define CLOSE_DISTANCE 3 // this is just in case of emergency
 
 #define LEFT 0
 #define RIGHT 1
@@ -44,10 +44,9 @@ const int usonic_front_trigger = 8; // 8;
 const int usonic_front_echo = 7; //7;
 
 // LEDs
-const int led_left = A4;  // A5;
-const int led_right = A3; // A4;
-const int led_front = A5; // A3;
-
+const int led_left = A4;  // A5; (GREEN)
+const int led_right = A5; // A3; (RED)
+const int led_front = A3; // A4; (YELLOW)
 
 // ********** VARIABLES - make them private if possible **********
 // Start and End
@@ -60,6 +59,7 @@ String letter_list;
 int letter_index;
 char direction_letter;
 char direction_letter_old;
+char check_letter;
 
 // Servos
 Servo servoLeft;
@@ -76,17 +76,22 @@ NewPing sonar[SONAR_NUM] = { // NewPing object array
 int distance[3];
 
 // Controllers
-double Setpoint, Input, Output;
+double setpoint, input, output;
 //Specify the links and initial tuning parameters
-double Kp = 2, Ki = 5, Kd = 1;
-PID bumpingPID(&Input, &Output, &Setpoint, Kp, 0, 0, DIRECT);
-PID offsetPID(&Input, &Output, &Setpoint, Kp, Ki, Kd, DIRECT);
-PID anglePID(&Input, &Output, &Setpoint, Kp, Ki, Kd, DIRECT);
-PID forwardPID(&Input, &Output, &Setpoint, Kp, Ki, Kd, DIRECT);
+double kp = 1, ki = 0.05, kd = 0.25;
+// PID bumpingPID(&Input, &Output, &Setpoint, Kp, 0, 0, DIRECT);
+PID offset_pid(&input, &output, &setpoint, kp, ki, kd, DIRECT);
+// PID offset_pid_right(&input_right, &output_right, &setpoint, kp, ki, kd, DIRECT);
+// PID anglePID(&Input, &Output, &Setpoint, Kp, Ki, Kd, DIRECT);
+// PID forwardPID(&Input, &Output, &Setpoint, Kp, Ki, Kd, DIRECT);
+
+int offset;
 
 // ********** INITIALISATION *********
 void setup() {
   Serial.begin(9600);
+
+  offset_pid.SetMode(AUTOMATIC);
 
   // LEDs
   pinMode(led_left, OUTPUT);
@@ -98,9 +103,10 @@ void setup() {
   servo_pwm[RIGHT] = DEFAULT_RIGHT_SPEED;
 
   // Initialise variables
-  // direction_letter = 'A';
+  direction_letter = 'A';
   // letter_list;
   direction_letter_old = 'X'; // needs to be initialised with X
+  check_letter = 'X';
   letter_index = 0; // should be set to 0
   pause = 1; // should be set to 1
   interrupt = 0; // should be set to 0
@@ -117,13 +123,6 @@ void setup() {
 void loop() {
 
   if (interrupt == 1) {
-    round_number ++;
-    Serial.print("button pressed ");
-    Serial.println(round_number);
-    pause = 0;
-    if (round_number == 2) {
-      transfer_table();
-    }
     start_maze();
     interrupt = 0;
   }
@@ -131,22 +130,34 @@ void loop() {
     // do nothing
     delay(500);
   } else {
-    // get data of all the three usonic sensors
+    // ********** GET DATA OF USONIC **********
     three_usonics();
-    Serial.println(distance[LEFT]);
+    direction_letter = analyse_where_to_go_1(distance); // different in number 2 !?
+    while (check_letter != direction_letter) {
+      // need to get 2 same letters to react, makes the system more robust
+      three_usonics();
+      direction_letter = analyse_where_to_go_1(distance); // different in number 2 !?
+      check_letter = direction_letter;
+    }
+
+    /*Serial.println(distance[LEFT]);
     Serial.println(distance[FRONT]);
     Serial.println(distance[RIGHT]);
-    Serial.println(" ---- ");
-    direction_letter = analyse_where_to_go_1(distance); // different in number 2 !?
+    Serial.println(" ---- ");*/
 
+    if(direction_letter == 'A'){
+      correct_offset();  
+    }
+    
     // ********* SET SERVO VALUES *********
     if ((close_wall(distance[LEFT]) == true) || (close_wall(distance[FRONT]) == true) || (close_wall(distance[RIGHT]) == true)) {
       // if any wall is too close: correct
       correct_bumping(); // emergency case
+      direction_letter_old = 'C';
     } else {
       // if direction changes
       if (direction_letter_old != direction_letter) {
-        Serial.print(direction_letter);
+        Serial.println(direction_letter);
         if (direction_letter != 'A') {
           set_letter(direction_letter);
         }
