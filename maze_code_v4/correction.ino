@@ -25,10 +25,10 @@ void correct_bumping() {
 // use PID to be in the middle while go_ahead()
 void correct_offset() {
   double errorP;
-  double much_kp = 4, much_ki = 0.2, much_kd = 1;
+  double much_kp = 3, much_ki = 0.2, much_kd = 1; // kp was 4 before
   int max_distance = (distance[RIGHT]+distance[LEFT]);
   setpoint = max_distance/2;
-  offset = max_distance/3;
+  offset = max_distance/4; // was /3 before
 
   if(distance[LEFT] > distance[RIGHT]){
     input = distance[RIGHT];
@@ -50,7 +50,6 @@ void correct_offset() {
 
   offset_pid.Compute();
 
-
   int output_left;
   int output_right;
 
@@ -58,14 +57,14 @@ void correct_offset() {
   Serial.print(output_right);
 
   if(distance[RIGHT] > distance[LEFT] + offset){ // go to the right
-     output_left = map(output, 0, max_distance, 1500, 1650);
-     output_right = map(output, 0, max_distance, 1430, 1500);
+     output_left = map(output, 0, max_distance, DEFAULT_STOP_SPEED, DEFAULT_LEFT_SPEED);
+     output_right = map(output, 0, max_distance, DEFAULT_RIGHT_SPEED, DEFAULT_STOP_SPEED);
   }else if(distance[LEFT] > distance[RIGHT] + offset) { // go to the left
-    output_left = map(output, 0, max_distance, 1650, 1500);
-    output_right = map(output, 0, max_distance, 1500, 1430);    
-  }else{
-    output_left = map(output, 0, max_distance, 1650, 1500);
-    output_right = map(output, 0, max_distance, 1430, 1500); 
+    output_left = map(output, 0, max_distance, DEFAULT_LEFT_SPEED, DEFAULT_STOP_SPEED);
+    output_right = map(output, 0, max_distance, DEFAULT_STOP_SPEED, DEFAULT_RIGHT_SPEED);    
+  }else{ // within offset, go straight
+    output_left = DEFAULT_LEFT_SPEED; // map(output, 0, max_distance, 1650, DEFAULT_STOP_SPEED);
+    output_right = DEFAULT_RIGHT_SPEED; // map(output, 0, max_distance, 1430, DEFAULT_STOP_SPEED); 
   }
 
   servo_pwm[LEFT] = output_left;
@@ -82,7 +81,7 @@ void correct_angle() {
 }
 
 // use PID to go faster in second round
-// for N, M, R - we can calucalte error in the front and go faster
+// for N, M, R - we can calucalte error in the front and go faster (1st round)
 void correct_forward() {
 
 }

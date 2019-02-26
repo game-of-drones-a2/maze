@@ -11,12 +11,14 @@
 #define MAX_LEFT_SPEED 1700
 #define MIN_LEFT_SPEED 1550
 
+#define DEFAULT_STOP_SPEED 1500
+
 #define DEFAULT_RIGHT_SPEED 1430
 #define MAX_RIGHT_SPEED 1300
 #define MIN_RIGHT_SPEED 1450
 
 #define MAX_DISTANCE 70 // max distance that sonar detects in cm
-#define MAX_WALL_DISTANCE 15
+#define MAX_WALL_DISTANCE 15 // maybe 20 ?!
 #define END_DISTANCE 40
 #define CLOSE_DISTANCE 3 // this is just in case of emergency
 
@@ -132,23 +134,29 @@ void loop() {
   } else {
     // ********** GET DATA OF USONIC **********
     three_usonics();
-    direction_letter = analyse_where_to_go_1(distance); // different in number 2 !?
-    while (check_letter != direction_letter) {
-      // need to get 2 same letters to react, makes the system more robust
-      three_usonics();
+    if (direction_letter != 'B') {
       direction_letter = analyse_where_to_go_1(distance); // different in number 2 !?
-      check_letter = direction_letter;
+      while (check_letter != direction_letter) {
+        // need to get 2 same letters to react, makes the system more robust
+        three_usonics();
+        direction_letter = analyse_where_to_go_1(distance); // different in number 2 !?
+        check_letter = direction_letter;
+      }
+    } else {
+      if (wall(distance[FRONT]) == false){ // no wall
+        direction_letter = 'A';  
+      }
     }
 
     /*Serial.println(distance[LEFT]);
-    Serial.println(distance[FRONT]);
-    Serial.println(distance[RIGHT]);
-    Serial.println(" ---- ");*/
+      Serial.println(distance[FRONT]);
+      Serial.println(distance[RIGHT]);
+      Serial.println(" ---- ");*/
 
-    if(direction_letter == 'A'){
-      correct_offset();  
+    if (direction_letter == 'A') {
+      correct_offset();
     }
-    
+
     // ********* SET SERVO VALUES *********
     if ((close_wall(distance[LEFT]) == true) || (close_wall(distance[FRONT]) == true) || (close_wall(distance[RIGHT]) == true)) {
       // if any wall is too close: correct

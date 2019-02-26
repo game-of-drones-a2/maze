@@ -57,7 +57,7 @@ void set_ahead() {
   servo_pwm[RIGHT] = DEFAULT_RIGHT_SPEED;
 }
 
-void set_right() { //need to feed values greater tgan 1500
+void set_right() { //To do: adjust values to turn sharper
   blink(0, 0, 1);
  // if (round_number = 1) {
     servo_pwm[LEFT] = 1650; // DEFAULT_LEFT_SPEED;
@@ -71,8 +71,8 @@ void set_right() { //need to feed values greater tgan 1500
 
 void set_back() {
   blink(0, 0, 0);
-  servo_pwm[LEFT] = DEFAULT_RIGHT_SPEED;
-  servo_pwm[RIGHT] = DEFAULT_RIGHT_SPEED;
+  servo_pwm[LEFT] = MAX_LEFT_SPEED;
+  servo_pwm[RIGHT] = MAX_LEFT_SPEED;
 }
 
 // end

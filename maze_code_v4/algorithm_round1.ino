@@ -18,7 +18,6 @@ char analyse_where_to_go_1(int distance[SONAR_NUM]) {
   } else if (wall(distance[RIGHT]) == false) {
     return 'R'; // right
   } else return 'B'; // when walls in each direction
-  // TODO: turn as long as !wall in front
 }
 
 void set_letter (char direction_letter) {
