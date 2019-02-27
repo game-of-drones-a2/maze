@@ -1,23 +1,33 @@
 // algorithm file for round 1
 // nothing with servos / sensors here
 
+/*
+ * P: end of maze when no walls = pause
+ * L: Left
+ * M: Left
+ * N: Left
+ * S: Straight, wenn no wall on right side
+ * A: Straight ahead - don't save in letter list
+ * R: Right
+ * B: Back - turn 180deg, if there are walls in each direction
+ */
 char analyse_where_to_go_1(int distance[SONAR_NUM]) {
 
   if ((end_wall(distance[LEFT]) == false) && (end_wall(distance[FRONT]) == false) && (end_wall(distance[RIGHT]) == false)) {
-    return 'P'; // end of maze when no walls = pause
-  } else if ((wall(distance[LEFT]) == false) && (wall(distance[FRONT]) == false) && (wall(distance[RIGHT]) == true)) {
+    return 'P'; // pause
+  } else if (wall(distance[LEFT]) == false && wall(distance[FRONT]) == false && wall(distance[RIGHT]) == true) {
     return 'L'; // left
   } else if (wall(distance[LEFT]) == false && wall(distance[FRONT]) == true && wall(distance[RIGHT]) == false) {
     return 'M'; // left
   } else if (wall(distance[LEFT]) == false && wall(distance[FRONT]) == true && wall(distance[RIGHT]) == true) {
     return 'N'; // left
   } else if (wall(distance[FRONT]) == false && wall(distance[RIGHT]) == false) {
-    return 'S'; // straight, wenn no wall on right side
+    return 'S'; // straight
   } else if (wall(distance[FRONT]) == false && wall(distance[RIGHT]) == true) {
-    return 'A'; // straight ahead - don't save in letter list
+    return 'A'; // straight
   } else if (wall(distance[RIGHT]) == false) {
     return 'R'; // right
-  } else return 'B'; // when walls in each direction
+  } else return 'B'; // back
 }
 
 void set_letter (char direction_letter) {

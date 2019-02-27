@@ -33,15 +33,20 @@ char get_letter () {
 // called when interrupt start button and second round
 void transfer_table () {
   char transfer_letter = 'X';
-  int i;
-  for (i = 0; i < letter_list.length(); i++) { // eventually, while not end or i-- at some point
-    if (letter_list.charAt(i) == 'B') {
-      transfer_letter = get_transfer_letter(i - 1, i + 1);
-      letter_list.replace(letter_list.substring(i - 1, i + 1), String(transfer_letter));
+  letter_index = letter_list.length();
+  int counter = 0;
+  while (letter_list.length() > counter) { // eventually, while not end or i-- at some point
+    //Serial.prin
+    if (letter_list.charAt(counter) == 'B') {
+      transfer_letter = get_transfer_letter(counter - 1, counter + 1);
+      letter_list.replace(letter_list.substring(counter - 1, counter + 1), String(transfer_letter));
+      Serial.print("Substring: ");
+      Serial.print(transfer_letter);
       if (transfer_letter == 'B') {
-        i = i - 2; // or not?!
+        counter = counter - 2; // or not?!
       }
     }
+    counter ++;
   }
   Serial.println("Letter list");
   Serial.print(letter_list);
@@ -49,6 +54,7 @@ void transfer_table () {
 
 // called in function transfer_table()
 char get_transfer_letter(char dec, char inc) {
+  // letter in the middle is always "B"
   char transf = 'X';
 
   if (dec = 'L') {
@@ -56,7 +62,7 @@ char get_transfer_letter(char dec, char inc) {
       case ('L'): transf = 'S'; break;
       case ('R'): transf = 'B'; break;
       case ('S'): transf = 'R'; break;
-      default: Serial.println("There is a problem"); break;
+      default: Serial.println("There is a problem L"); break;
     }
   }
   else if (dec == 'R') {
@@ -64,7 +70,7 @@ char get_transfer_letter(char dec, char inc) {
       case ('L'): transf = 'B'; break;
       case ('R'): transf = 'S'; break;
       case ('S'): transf = 'L'; break;
-      default: Serial.println("There is a problem"); break;
+      default: Serial.println("There is a problem R"); break;
     }
   }
   else if (dec == 'S') {
@@ -72,10 +78,10 @@ char get_transfer_letter(char dec, char inc) {
       case ('L'): transf = 'R'; break;
       case ('R'): transf = 'L'; break;
       case ('S'): transf = 'B'; break;
-      default: Serial.println("There is a problem"); break;
+      default: Serial.println("There is a problem S"); break;
     }
   } else {
-    Serial.println("There is a problem");
+    Serial.println("There is a problem xxxx");
   }
   return transf;
 }

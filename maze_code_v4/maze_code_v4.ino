@@ -93,12 +93,18 @@ int offset;
 void setup() {
   Serial.begin(9600);
 
+  // Controller for correction
   offset_pid.SetMode(AUTOMATIC);
 
   // LEDs
   pinMode(led_left, OUTPUT);
   pinMode(led_right, OUTPUT);
   pinMode(led_front, OUTPUT);
+
+  // START BUTTON
+  // tutorial: attachInterrupt(digitalPinToInterrupt(pin), ISR, mode);
+  pinMode(button_start, INPUT); // or INPUT_PULLUP or INPUT_PULLDOWN
+  attachInterrupt(digitalPinToInterrupt(button_start), button_start_maze_pressed, HIGH); // or use CHANGE
 
   // SPEED INIT
   servo_pwm[LEFT] = DEFAULT_LEFT_SPEED;
@@ -114,10 +120,8 @@ void setup() {
   interrupt = 0; // should be set to 0
   round_number = 0; // should be set to 0
 
-  // START BUTTON
-  // tutorial: attachInterrupt(digitalPinToInterrupt(pin), ISR, mode);
-  pinMode(button_start, INPUT); // or INPUT_PULLUP or INPUT_PULLDOWN
-  attachInterrupt(digitalPinToInterrupt(button_start), button_start_maze_pressed, HIGH); // or use CHANGE
+  // testing
+  testing_letterlist();
 
 }
 
