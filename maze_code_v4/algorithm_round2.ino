@@ -35,18 +35,16 @@ void transfer_table () {
   char transfer_letter = 'X';
   letter_index = letter_list.length();
   int counter = 0;
-  while (letter_list.length() > counter) { // eventually, while not end or i-- at some point
-    //Serial.prin
+  while (letter_list.length() > counter) { 
     if (letter_list.charAt(counter) == 'B') {
       transfer_letter = get_transfer_letter(counter - 1, counter + 1);
       letter_list.replace(letter_list.substring(counter - 1, counter + 1), String(transfer_letter));
       Serial.print("Substring: ");
       Serial.print(transfer_letter);
-      if (transfer_letter == 'B') {
-        counter = counter - 2; // or not?!
-      }
+      counter --;
+    }else{
+      counter ++;
     }
-    counter ++;
   }
   Serial.println("Letter list");
   Serial.print(letter_list);
