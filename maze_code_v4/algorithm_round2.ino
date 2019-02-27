@@ -51,7 +51,7 @@ void transfer_table () {
 char get_transfer_letter(char dec, char inc) {
   char transf = 'X';
 
-  if (dec = 'L') {
+  if (dec == 'L') {
     switch (inc) {
       case ('L'): transf = 'S'; break;
       case ('R'): transf = 'B'; break;
