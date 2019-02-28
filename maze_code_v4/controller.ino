@@ -56,6 +56,7 @@ void correct_offset() {
   Serial.print(output_left);
   Serial.print(output_right);
 
+  // **********  *********
   if(distance[RIGHT] > distance[LEFT] + offset){ // go to the right
      output_left = map(output, 0, max_distance, DEFAULT_STOP_SPEED, DEFAULT_LEFT_SPEED);
      output_right = map(output, 0, max_distance, DEFAULT_RIGHT_SPEED, DEFAULT_STOP_SPEED);

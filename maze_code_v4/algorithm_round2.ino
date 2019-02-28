@@ -1,29 +1,32 @@
 // algorithm file for round 2
 // nothing with servos / sensors here
 
-char analyse_where_to_go_2(int distance[SONAR_NUM], char letter) {
-// WRONG !!!!!
+// should compare the analyse 1 letter with the letter list
+
+
+char analyse_where_to_go_2(char analyse_letter, char letter_list_letter) {
+  // next letter of letter_list
+  // letter from analyse where to go
+  // WRONG !!!
+  char return_letter = 'A';
+  
   /* LETTER L */
-  if (letter == 'L') {
-    if (wall(distance[LEFT]) == true) {
-      return 'L';
-    } else return 'A';
+  if (analyse_letter == letter_list_letter) {
+      return_letter = 'L';
   /* LETTER S */
   } else if (letter == 'S') {
     if (wall(distance[FRONT]) == true) {
       if (wall(distance[RIGHT]) == true) {
-        return 'S';
-      } else {
-        return 'A';
+        return_letter = 'S';
       }
-    } else return 'A'; // maybe dangerous
+    } // else return 'A'; // maybe dangerous
    /* LETTER R */
   } else if (letter == 'R') {
     if (wall(distance[LEFT]) == true) {
-      return 'R';
-    } else return 'A';
-  } else return 'A'; // was A before
-  
+      return_letter 'R';
+    }
+  } 
+  return return_letter;
 }
 
 char get_letter () {
@@ -36,34 +39,20 @@ void transfer_table () {
   letter_index = letter_list.length();
   int counter = 0;
   while (letter_list.length() > counter) { 
-    //Serial.print(counter);
-    //Serial.println(letter_list.charAt(counter));
     if (letter_list.charAt(counter) == 'B') {
-      Serial.println(counter);
       transfer_letter = get_transfer_letter(letter_list.charAt(counter - 1), letter_list.charAt(counter + 1));
-      Serial.println(transfer_letter);
       letter_list.replace(letter_list.substring(counter - 1, counter + 2), String(transfer_letter));
-      Serial.println(letter_list);
-      Serial.println("Substring");
-      Serial.println(letter_list.substring(counter - 1, counter + 1));
-      //if (transfer_letter = 'B') counter --;
-      counter --;
-      counter --;
+      if (transfer_letter = 'B') counter --;
     }else{
-      // counter ++;
+      counter ++;
     }
-    counter ++;
   }
-  Serial.println("Letter list");
-  Serial.println(letter_list);
-  Serial.println("Letter list end");
 }
 
 // called in function transfer_table()
+// letter in the middle is always 'B'
 char get_transfer_letter(char dec, char inc) {
-  // letter in the middle is always "B"
   char transf = 'X';
-
   if (dec == 'L') {
     switch (inc) {
       case ('L'): transf = 'S'; break;
@@ -90,9 +79,5 @@ char get_transfer_letter(char dec, char inc) {
   } else {
     Serial.println("There is a problem xxxx");
   }
-
-  // Serial.print(dec);
-  // Serial.println(inc);
-
   return transf;
 }

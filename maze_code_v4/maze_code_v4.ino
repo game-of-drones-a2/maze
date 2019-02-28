@@ -121,8 +121,7 @@ void setup() {
   round_number = 0; // should be set to 0
 
   // testing
-  testing_letterlist();
-
+  testing_routines();
 }
 
 // ********* MAIN ROUTINE **********
@@ -173,7 +172,7 @@ void loop() {
         if (direction_letter != 'A') {
           set_letter(direction_letter);
         }
-        set_servo_values();
+        set_servo_values_round_1();
         direction_letter_old = direction_letter;
       }
     }

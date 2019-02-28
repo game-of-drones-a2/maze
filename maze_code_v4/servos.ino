@@ -19,7 +19,7 @@ void set_servos() {
   delay(5);
 }
 
-void set_servo_values() {
+void set_servo_values_round_1() {
   switch (direction_letter) {
     case 'A': set_ahead(); break; // go ahead, when nothing else
     case 'L': set_left(); break; // turn about 90deg
