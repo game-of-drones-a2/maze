@@ -36,18 +36,27 @@ void transfer_table () {
   letter_index = letter_list.length();
   int counter = 0;
   while (letter_list.length() > counter) { 
+    //Serial.print(counter);
+    //Serial.println(letter_list.charAt(counter));
     if (letter_list.charAt(counter) == 'B') {
-      transfer_letter = get_transfer_letter(counter - 1, counter + 1);
-      letter_list.replace(letter_list.substring(counter - 1, counter + 1), String(transfer_letter));
-      Serial.print("Substring: ");
-      Serial.print(transfer_letter);
+      Serial.println(counter);
+      transfer_letter = get_transfer_letter(letter_list.charAt(counter - 1), letter_list.charAt(counter + 1));
+      Serial.println(transfer_letter);
+      letter_list.replace(letter_list.substring(counter - 1, counter + 2), String(transfer_letter));
+      Serial.println(letter_list);
+      Serial.println("Substring");
+      Serial.println(letter_list.substring(counter - 1, counter + 1));
+      //if (transfer_letter = 'B') counter --;
+      counter --;
       counter --;
     }else{
-      counter ++;
+      // counter ++;
     }
+    counter ++;
   }
   Serial.println("Letter list");
-  Serial.print(letter_list);
+  Serial.println(letter_list);
+  Serial.println("Letter list end");
 }
 
 // called in function transfer_table()
@@ -81,5 +90,9 @@ char get_transfer_letter(char dec, char inc) {
   } else {
     Serial.println("There is a problem xxxx");
   }
+
+  // Serial.print(dec);
+  // Serial.println(inc);
+
   return transf;
 }
