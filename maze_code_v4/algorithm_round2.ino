@@ -14,7 +14,7 @@ char analyse_where_to_go_2(char analyse_letter, char letter_list_letter) {
     return_letter = analyse_letter;
   } else if (analyse_letter == 'L' && letter_list_letter == 'S') {
     return_letter = 'S';
-  } else if (analyse_letter == '' && letter_list_letter == ''){
+  } else if (analyse_letter == 'A' && letter_list_letter == 'A'){ // noooo
     
   }
   return return_letter;

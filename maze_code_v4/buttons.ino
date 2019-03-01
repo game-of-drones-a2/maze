@@ -31,6 +31,7 @@ void start_maze() {
     three_usonics();
     if (wall(distance[LEFT]) || wall(distance[FRONT]) || wall(distance[RIGHT])) {
       // if there is any wall detected
+      ahead_max_distance = distance[LEFT] + distance[RIGHT];
       break;
     }
   }

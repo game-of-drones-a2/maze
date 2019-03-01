@@ -87,6 +87,8 @@ PID offset_pid(&input, &output, &setpoint, kp, ki, kd, DIRECT);
 // PID anglePID(&Input, &Output, &Setpoint, Kp, Ki, Kd, DIRECT);
 // PID forwardPID(&Input, &Output, &Setpoint, Kp, Ki, Kd, DIRECT);
 
+double ahead_max_distance;
+
 int offset;
 
 // ********** INITIALISATION *********
@@ -151,10 +153,7 @@ void loop() {
       }
     }
 
-    /*Serial.println(distance[LEFT]);
-      Serial.println(distance[FRONT]);
-      Serial.println(distance[RIGHT]);
-      Serial.println(" ---- ");*/
+    // print_distances();
 
     if (direction_letter == 'A') {
       correct_offset();

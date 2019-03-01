@@ -25,54 +25,49 @@ void correct_bumping() {
 void correct_offset() {
   double errorP;
   double much_kp = 3, much_ki = 0.2, much_kd = 1; // kp was 4 before
-  int max_distance = (distance[RIGHT]+distance[LEFT]);
-  setpoint = max_distance/2;
-  offset = max_distance/4; // was /3 before
+  ahead_max_distance = (distance[RIGHT] + distance[LEFT]);
+  setpoint = ahead_max_distance / 2;
+  offset = ahead_max_distance / 4; // was /3 before
 
-  if(distance[LEFT] > distance[RIGHT]){
+  if (distance[LEFT] > distance[RIGHT]) {
     input = distance[RIGHT];
     errorP = distance[LEFT] - distance[RIGHT];
-  }else{
+  } else {
     input = distance[LEFT];
     errorP = distance[RIGHT] - distance[LEFT];
   }
 
-  Serial.println("#########");
-  Serial.println(errorP);
-  Serial.println(offset);
-  
-  if(errorP <= offset){ // just need little change
-    offset_pid.SetTunings(kp, 0, kd);  
-  }else{ // need to change a lot
-    offset_pid.SetTunings(much_kp, 0, much_kd);  
+  // print_errorP_and_offset();
+
+  if (errorP <= offset) { // just need little change
+    offset_pid.SetTunings(kp, 0, kd);
+  } else { // need to change a lot
+    offset_pid.SetTunings(much_kp, 0, much_kd);
   }
 
-  offset_pid.Compute();
+  controller_mapping(distance[LEFT], distance[RIGHT]); // beeds to be [LEFT], [RIGHT]
 
-  int output_left;
-  int output_right;
+}
 
-  Serial.print(output_left);
-  Serial.print(output_right);
+void correct_straight_left_wall() {
 
-  // **********  *********
-  if(distance[RIGHT] > distance[LEFT] + offset){ // go to the right
-     output_left = map(output, 0, max_distance, DEFAULT_STOP_SPEED, DEFAULT_LEFT_SPEED);
-     output_right = map(output, 0, max_distance, DEFAULT_RIGHT_SPEED, DEFAULT_STOP_SPEED);
-  }else if(distance[LEFT] > distance[RIGHT] + offset) { // go to the left
-    output_left = map(output, 0, max_distance, DEFAULT_LEFT_SPEED, DEFAULT_STOP_SPEED);
-    output_right = map(output, 0, max_distance, DEFAULT_STOP_SPEED, DEFAULT_RIGHT_SPEED);    
-  }else{ // within offset, go straight
-    output_left = DEFAULT_LEFT_SPEED; // map(output, 0, max_distance, 1650, DEFAULT_STOP_SPEED);
-    output_right = DEFAULT_RIGHT_SPEED; // map(output, 0, max_distance, 1430, DEFAULT_STOP_SPEED); 
+  double errorP;
+  double much_kp = 3, much_ki = 0.2, much_kd = 1; // kp was 4 before
+  int max_distance = ahead_max_distance;
+  setpoint = max_distance / 2;
+  offset = max_distance / 4;
+
+  input = distance[LEFT];
+  errorP = abs(distance[LEFT] - setpoint);
+
+  if (errorP <= offset) { // just need little change
+    offset_pid.SetTunings(kp, 0, kd);
+  } else { // need to change a lot
+    offset_pid.SetTunings(much_kp, 0, much_kd);
   }
+  // TODO: need to test that
+  controller_mapping(distance[LEFT], setpoint);
 
-  servo_pwm[LEFT] = output_left;
-  servo_pwm[RIGHT] = output_right; 
-
-  Serial.println(output);
-  
-  
 }
 
 // use PID to correct the angle while go_ahead()
@@ -84,4 +79,29 @@ void correct_angle() {
 // for N, M, R - we can calucalte error in the front and go faster (1st round)
 void correct_forward() {
 
+}
+
+
+void controller_mapping(int distance1, int distance2) {
+
+  int output_left;
+  int output_right;
+
+  offset_pid.Compute();
+
+  if (distance1 > distance2 + offset) { // go to the left
+    output_left = map(output, 0, max_distance, DEFAULT_LEFT_SPEED, DEFAULT_STOP_SPEED);
+    output_right = map(output, 0, max_distance, DEFAULT_STOP_SPEED, DEFAULT_RIGHT_SPEED);
+  } else if (distance2 > distance1 + offset) { // go to the right
+    output_left = map(output, 0, max_distance, DEFAULT_STOP_SPEED, DEFAULT_LEFT_SPEED);
+    output_right = map(output, 0, max_distance, DEFAULT_RIGHT_SPEED, DEFAULT_STOP_SPEED);
+  } else { // within offset, go straight
+    output_left = DEFAULT_LEFT_SPEED; // map(output, 0, max_distance, 1650, DEFAULT_STOP_SPEED);
+    output_right = DEFAULT_RIGHT_SPEED; // map(output, 0, max_distance, 1430, DEFAULT_STOP_SPEED);
+  }
+
+  // print_outputs();
+
+  servo_pwm[LEFT] = output_left;
+  servo_pwm[RIGHT] = output_right;
 }
