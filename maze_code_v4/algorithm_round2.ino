@@ -9,23 +9,14 @@ char analyse_where_to_go_2(char analyse_letter, char letter_list_letter) {
   // letter from analyse where to go
   // WRONG !!!
   char return_letter = 'A';
-  
-  /* LETTER L */
+
   if (analyse_letter == letter_list_letter) {
-      return_letter = 'L';
-  /* LETTER S */
-  } else if (letter == 'S') {
-    if (wall(distance[FRONT]) == true) {
-      if (wall(distance[RIGHT]) == true) {
-        return_letter = 'S';
-      }
-    } // else return 'A'; // maybe dangerous
-   /* LETTER R */
-  } else if (letter == 'R') {
-    if (wall(distance[LEFT]) == true) {
-      return_letter 'R';
-    }
-  } 
+    return_letter = analyse_letter;
+  } else if (analyse_letter == 'L' && letter_list_letter == 'S') {
+    return_letter = 'S';
+  } else if (analyse_letter == '' && letter_list_letter == ''){
+    
+  }
   return return_letter;
 }
 
@@ -38,12 +29,12 @@ void transfer_table () {
   char transfer_letter = 'X';
   letter_index = letter_list.length();
   int counter = 0;
-  while (letter_list.length() > counter) { 
+  while (letter_list.length() > counter) {
     if (letter_list.charAt(counter) == 'B') {
       transfer_letter = get_transfer_letter(letter_list.charAt(counter - 1), letter_list.charAt(counter + 1));
       letter_list.replace(letter_list.substring(counter - 1, counter + 2), String(transfer_letter));
       if (transfer_letter = 'B') counter --;
-    }else{
+    } else {
       counter ++;
     }
   }

@@ -21,7 +21,6 @@ void correct_bumping() {
   }
 }
 
-
 // use PID to be in the middle while go_ahead()
 void correct_offset() {
   double errorP;
