@@ -20,6 +20,7 @@ char analyse_where_to_go_2(char analyse_letter, char letter_list_letter) {
   return return_letter;
 }
 
+// redo, we need letter_index++ somewhere
 char get_letter () {
   return (letter_list.charAt(letter_index));
 }
@@ -27,7 +28,6 @@ char get_letter () {
 // called when interrupt start button and second round
 void transfer_table () {
   char transfer_letter = 'X';
-  letter_index = letter_list.length();
   int counter = 0;
   while (letter_list.length() > counter) {
     if (letter_list.charAt(counter) == 'B') {
