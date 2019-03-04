@@ -40,7 +40,7 @@ const int servo_right = 6; // PWM 11
 // USONIC
 const int usonic_left_trigger = 4; // 4; -- was 4 before
 const int usonic_left_echo = 3; // 3;  -- was 3 before
-const int usonic_right_trigger = A0; // 9;
+const int usonic_right_trigger = A0; // 9;                                                                                                                                                        
 const int usonic_right_echo = A1; // 9;
 const int usonic_front_trigger = 8; // 8;
 const int usonic_front_echo = 7; //7;
@@ -58,6 +58,8 @@ int pause;
 
 // Letters
 String letter_list;
+String letter_list_2;
+char letter_list_letter;
 int letter_index;
 char direction_letter;
 char direction_letter_old;
@@ -81,6 +83,8 @@ int distance[3];
 double setpoint, input, output;
 //Specify the links and initial tuning parameters
 double kp = 1, ki = 0.05, kd = 0.25;
+double much_kp = 3, much_ki = 0.2, much_kd = 1; // kp was 4 before
+
 // PID bumpingPID(&Input, &Output, &Setpoint, Kp, 0, 0, DIRECT);
 PID offset_pid(&input, &output, &setpoint, kp, ki, kd, DIRECT);
 // PID offset_pid_right(&input_right, &output_right, &setpoint, kp, ki, kd, DIRECT);
@@ -93,7 +97,7 @@ int offset;
 
 // ********** INITIALISATION *********
 void setup() {
-  Serial.begin(9600);
+  Serial.begin(115200);
 
   // Controller for correction
   offset_pid.SetMode(AUTOMATIC);
@@ -153,6 +157,12 @@ void loop() {
       }
     }
 
+    // NEW STUFF 03.03
+    if(round_number > 1){
+        print_letters();
+        direction_letter = analyse_where_to_go_2(direction_letter);
+        print_letters();
+    }
     // print_distances();
 
     if (direction_letter == 'A') {
@@ -167,11 +177,10 @@ void loop() {
     } else {
       // if direction changes
       if (direction_letter_old != direction_letter) {
-        Serial.println(direction_letter);
         if (direction_letter != 'A') {
-          set_letter(direction_letter);
+          set_letter(direction_letter); // just in 1st round TODO
         }
-        set_servo_values_round_1();
+        set_servo_values();
         direction_letter_old = direction_letter;
       }
     }

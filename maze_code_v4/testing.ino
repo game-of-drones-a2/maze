@@ -1,5 +1,16 @@
+/*
+ * TODO: need to just save B once
+ * 
+ * 
+ * 
+ * 
+ * 
+ */
+
+
+
 void testing_routines() {
-  testing_letterlist();
+  // testing_letterlist();
   // testing_leds();
 
 }
@@ -30,13 +41,19 @@ void print_distances() {
   Serial.println(" ---- ");
 }
 
-void print_outputs() {
+void print_outputs(double output_left, double output_right) {
   Serial.print(output_left);
   Serial.print(output_right);
 }
 
-void print_errorP_and_offset(){
-  Serial.println("#########");
+void print_errorP_and_offset(double errorP) {
+  Serial.println("error and offset");
   Serial.println(errorP);
   Serial.println(offset);
+}
+
+void print_letters(){
+  Serial.print("Direction letter: ");
+  Serial.println(direction_letter);
+  Serial.print(letter_index);
 }

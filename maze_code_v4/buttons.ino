@@ -1,3 +1,5 @@
+// TODO: reset letter list 2
+
 // tell robot, that a new round has started
 // if round is 2, the transfer table is used to simplify the path
 void button_start_maze_pressed () {
@@ -13,12 +15,15 @@ void button_start_maze_pressed () {
 void start_maze() {
   // LED
   blink(1, 1, 1);
+  letter_list_2 = "";
+  letter_index = 0;
   round_number ++;
   Serial.print("button pressed ");
   Serial.println(round_number);
   pause = 0;
   if (round_number == 2) {
     transfer_table();
+    Serial.println(letter_list);
   }
   // SERVOS
   servoLeft.attach(servo_left);
