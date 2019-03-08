@@ -1,7 +1,15 @@
-// TODO: reset letter list 2
+/*
+    Maze Solving Robot
+    2018/2019
+    Christina Bornberg, Alex Bruczkowski
 
-// tell robot, that a new round has started
-// if round is 2, the transfer table is used to simplify the path
+    TODO: reset letter list 2
+    tell robot, that a new round has started
+    if round is 2, the transfer table is used to simplify the path
+
+*/
+
+// ********** CALLED BY THE INTERRUPT FROM BUTTON ********
 void button_start_maze_pressed () {
   delay(1000); // for debouncing
   interrupt = 1;

@@ -1,6 +1,19 @@
-// includes
+/*
+    Maze Solving Robot
+    2018/2019
+    Christina Bornberg, Alex Bruczkowski
+
+    Hardware components in this project:
+    - 3 LEDs
+    - 2 servos (Parallax Continuous Rotation Servo)
+    - 3 usonic sensors (HC-SR04)
+    - 1 push button
+    - resistors, decoupling capacitors
+
+*/
+
+// ********* INCLUDES *********
 #include <NewPing.h>
-//#include <SoftwareSerial.h>
 #include <PID_v1.h>
 #include <Servo.h>
 
@@ -17,6 +30,7 @@
 #define MAX_RIGHT_SPEED 1300
 #define MIN_RIGHT_SPEED 1450
 
+// DISTANCES - USONIC SENSOR
 #define MAX_DISTANCE 70 // max distance that sonar detects in cm
 #define MAX_WALL_DISTANCE 15 // maybe 20 ?!
 #define END_DISTANCE 40
@@ -40,7 +54,7 @@ const int servo_right = 6; // PWM 11
 // USONIC
 const int usonic_left_trigger = A3; // 4; -- was 4 before
 const int usonic_left_echo = A4; // 3;  -- was 3 before
-const int usonic_right_trigger = 3; // 9;                                                                                                                                                        
+const int usonic_right_trigger = 3; // 9;
 const int usonic_right_echo = 4; // 9;
 const int usonic_front_trigger = 8; // 8;
 const int usonic_front_echo = 7; //7;
@@ -80,24 +94,22 @@ NewPing sonar[SONAR_NUM] = { // NewPing object array
 int distance[3];
 
 // Controllers
-double setpoint, input, output;
+double setpoint, input, output, ahead_max_distance;
+int offset;
+
 //Specify the links and initial tuning parameters
 double kp = 1, ki = 0.05, kd = 0.25;
 double much_kp = 3, much_ki = 0.2, much_kd = 1; // kp was 4 before
 
-// PID bumpingPID(&Input, &Output, &Setpoint, Kp, 0, 0, DIRECT);
 PID offset_pid(&input, &output, &setpoint, kp, ki, kd, DIRECT);
 // PID offset_pid_right(&input_right, &output_right, &setpoint, kp, ki, kd, DIRECT);
 // PID anglePID(&Input, &Output, &Setpoint, Kp, Ki, Kd, DIRECT);
 // PID forwardPID(&Input, &Output, &Setpoint, Kp, Ki, Kd, DIRECT);
 
-double ahead_max_distance;
-
-int offset;
-
 // ********** INITIALISATION *********
 void setup() {
-  Serial.begin(9600);
+  //Serial.begin(9600);
+  Serial.begin(115200);
 
   // Controller for correction
   offset_pid.SetMode(AUTOMATIC);
@@ -107,8 +119,7 @@ void setup() {
   pinMode(led_right, OUTPUT);
   pinMode(led_front, OUTPUT);
 
-  // START BUTTON
-  // tutorial: attachInterrupt(digitalPinToInterrupt(pin), ISR, mode);
+  // START BUTTON: attachInterrupt(digitalPinToInterrupt(pin), ISR, mode);
   pinMode(button_start, INPUT); // or INPUT_PULLUP or INPUT_PULLDOWN
   attachInterrupt(digitalPinToInterrupt(button_start), button_start_maze_pressed, HIGH); // or use CHANGE
 
@@ -127,7 +138,7 @@ void setup() {
   round_number = 0; // should be set to 0
 
   // testing
-  testing_routines();
+  // testing_routines();
 }
 
 // ********* MAIN ROUTINE **********
@@ -144,31 +155,28 @@ void loop() {
     // ********** GET DATA OF USONIC **********
     three_usonics();
     print_distances();
+    // ********* FIND OUT WHERE TO GO *********
     if (direction_letter != 'B') {
-      direction_letter = analyse_where_to_go_1(distance); // different in number 2 !?
+      direction_letter = analyse_where_to_go(distance); // different in number 2 !?
       while (check_letter != direction_letter) {
         // need to get 2 same letters to react, makes the system more robust
         three_usonics();
-        direction_letter = analyse_where_to_go_1(distance); // different in number 2 !?
+        direction_letter = analyse_where_to_go(distance); // different in number 2 !?
         check_letter = direction_letter;
       }
     } else {
-      if (wall(distance[FRONT]) == false){ // no wall
+      if (wall(distance[FRONT]) == false) { // no wall
         direction_letter = 'A';
       }
     }
-
-    // NEW STUFF 03.03
-    if(round_number > 1){
-        print_letters();
-        direction_letter = analyse_where_to_go_2(direction_letter);
-        print_letters();
+    if (round_number > 1) {
+      print_letters();
+      direction_letter = compare_letters(direction_letter);
+      print_letters();
     }
-
     if (direction_letter == 'A') {
       correct_offset();
     }
-
     // ********* SET SERVO VALUES *********
     if ((close_wall(distance[LEFT]) == true) || (close_wall(distance[FRONT]) == true) || (close_wall(distance[RIGHT]) == true)) {
       // if any wall is too close: correct
@@ -184,7 +192,6 @@ void loop() {
         direction_letter_old = direction_letter;
       }
     }
-
     // ********* SET SERVOS *********
     if (servo_pwm[LEFT] != servo_pwm_old[LEFT] || servo_pwm[RIGHT] != servo_pwm_old[RIGHT]) {
       // if either of them has changed
@@ -192,6 +199,6 @@ void loop() {
       servo_pwm_old[LEFT] = servo_pwm[LEFT];
       servo_pwm_old[RIGHT] = servo_pwm[RIGHT];
     }
-    print_servo_values();
+    // printing_routines();
   }
 }

@@ -1,4 +1,11 @@
-// Error is the difference between set point and actual point
+/*
+ *  Maze Solving Robot
+ *  2018/2019
+ *  Christina Bornberg, Alex Bruczkowski
+ *  
+ *  Error is the difference between set point and actual point
+ *  
+ */
 
 // ********** EMERGENCY **********
 // avoid bumping, if any wall is close

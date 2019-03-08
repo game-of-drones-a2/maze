@@ -1,3 +1,13 @@
+/*
+ *  Maze Solving Robot
+ *  2018/2019
+ *  Christina Bornberg, Alex Bruczkowski
+ *  
+ *  LEDs
+ *  
+ */
+
+// ********* LEDs that show, where no wall is ********
 void blink(int left, int front, int right){
   if(left == 1){
     digitalWrite(led_left, HIGH);  

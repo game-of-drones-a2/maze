@@ -1,10 +1,16 @@
-// algorithm file for round 2
-// nothing with servos / sensors here
+/*
+ *  Maze Solving Robot
+ *  2018/2019
+ *  Christina Bornberg, Alex Bruczkowski
+ *  
+ *  algorithm file for round 2
+ *  nothing with servos / sensors here
+ *  should compare the analyse 1 letter with the letter list 
+ *  
+ */
 
-// should compare the analyse 1 letter with the letter list
-
-
-char analyse_where_to_go_2(char analyse_letter) { // second one - call by address, find out how TODO
+// ********** COMPARES LETTER FROM LIST TO ANALYSED LETTER *********
+char compare_letters(char analyse_letter) { // second one - call by address, find out how TODO
   // analyse letter = letter from sensors
   // letter list letter = letter that was tracked in the first round
   // next letter of letter_list
