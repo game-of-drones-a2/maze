@@ -1,16 +1,3 @@
-/*
- *  Maze Solving Robot
- *  2018/2019
- *  Christina Bornberg, Alex Bruczkowski
- *
- *  Hardware components in this project:
- *  - 3 LEDs
- *  - 2 servos (Parallax Continuous Rotation Servo)
- *  - 3 usonic sensors (HC-SR04)
- *  - 1 push button
- *  - resistors, decoupling capacitors
-*/
-
 // ********* INCLUDES *********
 #include <NewPing.h>
 #include <PID_v1.h>
@@ -104,6 +91,17 @@ PID offset_pid(&input, &output, &setpoint, kp, ki, kd, DIRECT);
 // PID offset_pid_right(&input_right, &output_right, &setpoint, kp, ki, kd, DIRECT);
 // PID anglePID(&Input, &Output, &Setpoint, Kp, Ki, Kd, DIRECT);
 // PID forwardPID(&Input, &Output, &Setpoint, Kp, Ki, Kd, DIRECT);
+
+//  Maze Solving Robot
+//  2018/2019
+//  Christina Bornberg, Alex Bruczkowski
+
+//  Hardware components in this project:
+//   - 3 LEDs
+//   - 2 servos (Parallax Continuous Rotation Servo)
+//   - 3 usonic sensors (HC-SR04)
+//   - 1 push button
+//   - resistors, decoupling capacitors
 
 // ********** INITIALISATION *********
 void setup() {
