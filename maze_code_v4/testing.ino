@@ -2,16 +2,13 @@
  * TODO: need to just save B once
  * 
  * 
- * 
- * 
- * 
  */
 
 
 
 void testing_routines() {
-  // testing_letterlist();
-  // testing_leds();
+  testing_letterlist();
+  testing_leds();
 
 }
 
@@ -35,25 +32,46 @@ void testing_leds() {
 }
 
 void print_distances() {
-  Serial.println(distance[LEFT]);
-  Serial.println(distance[FRONT]);
+//  Serial.println("Distances: Left, Front, Right");
+  /*Serial.print(distance[LEFT]);
+  Serial.print(",");
+  Serial.print(distance[FRONT]);
+  Serial.print(",");
   Serial.println(distance[RIGHT]);
-  Serial.println(" ---- ");
+  // Serial.print(",");
+  // Serial.println(" ---- ");
+  //*/
+}
+
+void print_servo_values(){
+  //Serial.println("Servo PWM data: Left, Right");
+  /*Serial.print(servo_pwm[LEFT]);
+  Serial.print(",");
+  Serial.println(servo_pwm[RIGHT]); 
+  //*/
 }
 
 void print_outputs(double output_left, double output_right) {
-  Serial.print(output_left);
+  /*Serial.print(output_left);
   Serial.print(output_right);
+  //*/
 }
 
 void print_errorP_and_offset(double errorP) {
-  Serial.println("error and offset");
-  Serial.println(errorP);
-  Serial.println(offset);
+  //Serial.println("Controller: Error, Offset, Output");
+  Serial.print(errorP);
+  Serial.print(", ");
+  // Serial.print(offset);
+  Serial.print(servo_pwm[LEFT]);
+  Serial.print(", ");
+  //Serial.println(output);
+  Serial.println(servo_pwm[RIGHT]);
+  //*/
 }
 
 void print_letters(){
-  Serial.print("Direction letter: ");
+ /* Serial.print("Direction letter: ");
   Serial.println(direction_letter);
   Serial.print(letter_index);
+  //*/
 }

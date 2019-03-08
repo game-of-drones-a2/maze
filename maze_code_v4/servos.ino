@@ -16,7 +16,6 @@
 void set_servos() {
   servoLeft.writeMicroseconds(servo_pwm[LEFT]);
   servoRight.writeMicroseconds(servo_pwm[RIGHT]);
-  delay(5);
 }
 
 void set_servo_values() {

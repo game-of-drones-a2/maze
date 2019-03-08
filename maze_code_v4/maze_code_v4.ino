@@ -38,17 +38,17 @@ const int servo_left = 5; // PWM 10
 const int servo_right = 6; // PWM 11
 
 // USONIC
-const int usonic_left_trigger = 4; // 4; -- was 4 before
-const int usonic_left_echo = 3; // 3;  -- was 3 before
-const int usonic_right_trigger = A0; // 9;                                                                                                                                                        
-const int usonic_right_echo = A1; // 9;
+const int usonic_left_trigger = A3; // 4; -- was 4 before
+const int usonic_left_echo = A4; // 3;  -- was 3 before
+const int usonic_right_trigger = 3; // 9;                                                                                                                                                        
+const int usonic_right_echo = 4; // 9;
 const int usonic_front_trigger = 8; // 8;
 const int usonic_front_echo = 7; //7;
 
 // LEDs
-const int led_left = A4;  // A5; (GREEN)
-const int led_right = A5; // A3; (RED)
-const int led_front = A3; // A4; (YELLOW)
+const int led_left = A2;  // A5; (GREEN)
+const int led_right = 9; // A3; (RED)
+const int led_front = A5; // A4; (YELLOW)
 
 // ********** VARIABLES - make them private if possible **********
 // Start and End
@@ -97,7 +97,7 @@ int offset;
 
 // ********** INITIALISATION *********
 void setup() {
-  Serial.begin(115200);
+  Serial.begin(9600);
 
   // Controller for correction
   offset_pid.SetMode(AUTOMATIC);
@@ -143,6 +143,7 @@ void loop() {
   } else {
     // ********** GET DATA OF USONIC **********
     three_usonics();
+    print_distances();
     if (direction_letter != 'B') {
       direction_letter = analyse_where_to_go_1(distance); // different in number 2 !?
       while (check_letter != direction_letter) {
@@ -153,7 +154,7 @@ void loop() {
       }
     } else {
       if (wall(distance[FRONT]) == false){ // no wall
-        direction_letter = 'A';  
+        direction_letter = 'A';
       }
     }
 
@@ -163,7 +164,6 @@ void loop() {
         direction_letter = analyse_where_to_go_2(direction_letter);
         print_letters();
     }
-    // print_distances();
 
     if (direction_letter == 'A') {
       correct_offset();
@@ -192,5 +192,6 @@ void loop() {
       servo_pwm_old[LEFT] = servo_pwm[LEFT];
       servo_pwm_old[RIGHT] = servo_pwm[RIGHT];
     }
+    print_servo_values();
   }
 }

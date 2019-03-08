@@ -85,7 +85,7 @@ void controller_mapping(int distance1, int distance2) {
 
   errorP = abs(distance1 - distance2);
   // errorP = abs(distance[RIGHT] - setpoint);
-  // print_errorP_and_offset(errorP);
+  print_errorP_and_offset(errorP);
 
   if (errorP <= offset) { // just need little change
     offset_pid.SetTunings(kp, 0, kd);

@@ -14,7 +14,7 @@ void button_start_maze_pressed () {
 // this is working
 void start_maze() {
   // LED
-  blink(1, 1, 1);
+  //blink(1, 1, 1);
   letter_list_2 = "";
   letter_index = 0;
   round_number ++;
@@ -28,15 +28,19 @@ void start_maze() {
   // SERVOS
   servoLeft.attach(servo_left);
   servoRight.attach(servo_right);
+  Serial.println("attach");
   delay(500);
   servo_pwm[LEFT] = DEFAULT_LEFT_SPEED;
   servo_pwm[RIGHT] = DEFAULT_RIGHT_SPEED;
   set_servos();
   while (true) {
     three_usonics();
+    Serial.print("sensors");
+    print_distances();
     if (wall(distance[LEFT]) || wall(distance[FRONT]) || wall(distance[RIGHT])) {
       // if there is any wall detected
       ahead_max_distance = distance[LEFT] + distance[RIGHT];
+      Serial.println("break");
       break;
     }
   }
