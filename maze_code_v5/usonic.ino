@@ -1,7 +1,7 @@
 // here the usonic sensor should get 3 distances: Left, Right, Straight sensors
 
 // ********** GET DATA OF ALL USONIC SENSORS **********
-int three_usonics(){
+void three_usonics(){
   for(int i = 0; i < SONAR_NUM; i++){
     distance[i] = get_usonic_data(sonar[i]);
   }

@@ -30,7 +30,7 @@ char compare_letters(char analyse_letter) { // second one - call by address, fin
   }
 
   if(return_letter == 'N' || return_letter == 'M'){
-    return_letter == 'L';
+    return_letter = 'L'; // changed!!!
   }
   if (return_letter != 'A' && letter_list_letter != get_letter()) { // TODO or yes ?!
     letter_list_letter = get_letter();
@@ -53,7 +53,7 @@ void transfer_table () {
     if (letter_list.charAt(counter) == 'B') {
       transfer_letter = get_transfer_letter(letter_list.charAt(counter - 1), letter_list.charAt(counter + 1));
       letter_list.replace(letter_list.substring(counter - 1, counter + 2), String(transfer_letter));
-      if (transfer_letter = 'B') counter --;
+      if (transfer_letter == 'B') counter --; // changed
     } else {
       counter ++;
     }
