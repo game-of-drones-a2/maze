@@ -10,12 +10,11 @@
 */
 
 // ********** COMPARES LETTER FROM LIST TO ANALYSED LETTER *********
-char compare_letters(char analyse_letter) { // second one - call by address, find out how TODO
-  // analyse letter = letter from sensors
-  // letter list letter = letter that was tracked in the first round
-  // next letter of letter_list
-  // letter from analyse where to go
-  // WRONG !!!
+// analyse letter = letter from sensors
+// letter list letter = letter that was tracked in the first round
+// next letter of letter_list
+// letter from analyse where to go
+char compare_letters(char analyse_letter) {
 
   char return_letter = 'A';
 
@@ -50,6 +49,11 @@ char get_letter () {
 void transfer_table () {
   char transfer_letter = 'A';
   unsigned int counter = 0;
+  if(letter_list.charAt(counter) == 'B'){
+    // there can't be a back 'B' at the beginning
+    letter_list.replace(letter_list.substring(counter), String('A'));
+    counter ++;
+  }
   while (letter_list.length() > counter) {
     if (letter_list.charAt(counter) == 'B') {
       if (letter_list.charAt(counter + 1) == 'B') {

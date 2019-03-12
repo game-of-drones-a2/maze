@@ -3,7 +3,8 @@
     2018/2019
     Christina Bornberg, Alex Bruczkowski
 
-    TODO: reset letter list 2
+    Initialisation for round 2+
+    reset letter list 2
     tell robot, that a new round has started
     if round is 2, the transfer table is used to simplify the path
 
@@ -29,8 +30,11 @@ void start_maze() {
   Serial.print("button pressed ");
   Serial.println(round_number);
   pause = 0;
+  // INITIALISATION ROUND 2
   if (round_number == 2) {
     transfer_table();
+    letter_list_letter = get_letter();
+    letter_index++;
     Serial.println(letter_list);
   }
   // SERVOS

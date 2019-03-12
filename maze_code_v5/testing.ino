@@ -42,7 +42,7 @@ void testing_leds() {
 }
 
 void print_distances() {
-  /*Serial.println("Distances: Left, Front, Right");
+  Serial.println("Distances: Left, Front, Right");
   Serial.print(distance[LEFT]);
   Serial.print(",");
   Serial.print(distance[FRONT]);
