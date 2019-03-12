@@ -32,12 +32,15 @@ void set_servo_values() {
   }
 }
 
-void set_left() {    //need to feed values less than 1500
+// ********* LEFT *********
+//need to feed values less than 1500
+void set_left() { 
   blink(1, 1, 0);
   servo_pwm[LEFT] = 1550; //DEFAULT_RIGHT_SPEED;
   servo_pwm[RIGHT] = 1400; //DEFAULT_RIGHT_SPEED;
 }
 
+// ********* STRAIGHT **********
 // go straight, until a wall is detected (1st round 'R', second round 'L')
 void set_straight(int round_number) {
   blink(0, 1, 1);
@@ -50,13 +53,16 @@ void set_straight(int round_number) {
   }
 }
 
+// ********* STRAIGHT AHEAD *********
 void set_ahead() {
   blink(0, 1, 0);
   servo_pwm[LEFT] = DEFAULT_LEFT_SPEED;
   servo_pwm[RIGHT] = DEFAULT_RIGHT_SPEED;
 }
 
-void set_right() { //To do: adjust values to turn sharper
+// ********* RIGHT *********
+//To do: adjust values to turn sharper
+void set_right() { 
   blink(0, 0, 1);
  // if (round_number = 1) {
     servo_pwm[LEFT] = 1650; // DEFAULT_LEFT_SPEED;
@@ -68,13 +74,14 @@ void set_right() { //To do: adjust values to turn sharper
   }*/
 }
 
+// ********* 180 deg turn **********
 void set_back() {
   blink(0, 0, 0);
   servo_pwm[LEFT] = MAX_LEFT_SPEED;
   servo_pwm[RIGHT] = MAX_LEFT_SPEED;
 }
 
-// end
+// ********* STOP, END OF MAZE*********
 void set_pause() {
   pause = 1;
   servoLeft.detach();

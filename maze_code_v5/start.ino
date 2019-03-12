@@ -43,12 +43,10 @@ void start_maze() {
   set_servos();
   while (true) {
     three_usonics();
-    Serial.print("sensors");
     print_distances();
     if (wall(distance[LEFT]) || wall(distance[FRONT]) || wall(distance[RIGHT])) {
       // if there is any wall detected
       ahead_max_distance = distance[LEFT] + distance[RIGHT];
-      Serial.println("break");
       break;
     }
   }

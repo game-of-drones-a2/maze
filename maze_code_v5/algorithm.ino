@@ -1,13 +1,13 @@
 /*
- *  Maze Solving Robot
- *  2018/2019
- *  Christina Bornberg, Alex Bruczkowski
- *  
- *  algorithm file for round 2
- *  nothing with servos / sensors here
- *  should compare the analyse 1 letter with the letter list 
- *  
- */
+    Maze Solving Robot
+    2018/2019
+    Christina Bornberg, Alex Bruczkowski
+
+    algorithm file for round 2
+    nothing with servos / sensors here
+    should compare the analyse 1 letter with the letter list
+
+*/
 
 // ********** COMPARES LETTER FROM LIST TO ANALYSED LETTER *********
 char compare_letters(char analyse_letter) { // second one - call by address, find out how TODO
@@ -29,9 +29,10 @@ char compare_letters(char analyse_letter) { // second one - call by address, fin
     return_letter = 'R';
   }
 
-  if(return_letter == 'N' || return_letter == 'M'){
+  if (return_letter == 'N' || return_letter == 'M') {
     return_letter = 'L'; // changed!!!
   }
+  Serial.println(return_letter);
   if (return_letter != 'A' && letter_list_letter != get_letter()) { // TODO or yes ?!
     letter_list_letter = get_letter();
     letter_index++;
@@ -47,10 +48,14 @@ char get_letter () {
 
 // called when interrupt start button and second round
 void transfer_table () {
-  char transfer_letter = 'X';
-  int counter = 0;
+  char transfer_letter = 'A';
+  unsigned int counter = 0;
   while (letter_list.length() > counter) {
     if (letter_list.charAt(counter) == 'B') {
+      if (letter_list.charAt(counter + 1) == 'B') {
+        // if there are two times back in a row (this should never happen in real life!!!)
+        letter_list.replace(letter_list.substring(counter, counter + 2), String('B'));
+      }
       transfer_letter = get_transfer_letter(letter_list.charAt(counter - 1), letter_list.charAt(counter + 1));
       letter_list.replace(letter_list.substring(counter - 1, counter + 2), String(transfer_letter));
       if (transfer_letter == 'B') counter --; // changed
@@ -63,7 +68,7 @@ void transfer_table () {
 // called in function transfer_table()
 // letter in the middle is always 'B'
 char get_transfer_letter(char dec, char inc) {
-  char transf = 'X';
+  char transf = 'A';
   if (dec == 'L') {
     switch (inc) {
       case ('L'): transf = 'S'; break;
@@ -88,7 +93,7 @@ char get_transfer_letter(char dec, char inc) {
       default: Serial.println("There is a problem S"); break;
     }
   } else {
-    Serial.println("There is a problem xxxx");
+    Serial.println("There is a problem in general");
   }
   return transf;
 }

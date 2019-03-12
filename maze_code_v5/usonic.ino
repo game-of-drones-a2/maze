@@ -1,4 +1,11 @@
-// here the usonic sensor should get 3 distances: Left, Right, Straight sensors
+/*
+    Maze Solving Robot
+    2018/2019
+    Christina Bornberg, Alex Bruczkowski
+
+    here the usonic sensor should get 3 distances: Left, Right, Straight sensors
+
+*/
 
 // ********** GET DATA OF ALL USONIC SENSORS **********
 void three_usonics(){

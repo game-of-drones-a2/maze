@@ -1,12 +1,17 @@
 /*
- * TODO: need to just save B once
- * 
- * 
- */
+    Maze Solving Robot
+    2018/2019
+    Christina Bornberg, Alex Bruczkowski
+
+    Testing and printing
+    (un)comment stuff, you (don't) want to be printed/tested
+    TODO: need to just save B once
+
+*/
 
 void testing_routines(){
-  //testing_letterlist();
-  //testing_leds();
+  testing_letterlist();
+  testing_leds();
 }
 
 void printing_routines(){
@@ -15,18 +20,19 @@ void printing_routines(){
 }
 
 void testing_letterlist() {
-  /*letter_list = "LLBSBLLLLRSRBLLBLLRSLLLRBLRLLBLLBLLLLBRLBLLLBRRLL";
+  letter_list = "LLBSBLLLLRSRBLLBLLRSLLLRBLRLLBLLBLLLLBRLBLLLBRRLL";
   Serial.print("Test letter list: ");
   Serial.println(letter_list);
   transfer_table();
   Serial.print("Test shorten: ");
-  Serial.print(letter_list);
+  Serial.println(letter_list);
   letter_list = ""; // working?
   // */
 }
 
 void testing_leds() {
-  /*blink(1, 0, 0);
+  Serial.println("LEDs");
+  blink(1, 0, 0);
   delay(1000);
   blink(0, 1, 0);
   delay(1000);

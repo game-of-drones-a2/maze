@@ -124,7 +124,7 @@ void setup() {
   servo_pwm[LEFT] = DEFAULT_LEFT_SPEED;
   servo_pwm[RIGHT] = DEFAULT_RIGHT_SPEED;
 
-  // Initialise variables
+  // VARIABLES INIT
   direction_letter = 'A';
   // letter_list;
   direction_letter_old = 'X'; // needs to be initialised with X
@@ -134,8 +134,8 @@ void setup() {
   interrupt = 0; // should be set to 0
   round_number = 0; // should be set to 0
 
-  // testing
-  // testing_routines();
+  // TESTING
+  testing_routines();
 }
 
 // ********* MAIN ROUTINE **********
