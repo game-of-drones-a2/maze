@@ -1,11 +1,11 @@
 /*
- *  Maze Solving Robot
- *  2018/2019
- *  Christina Bornberg, Alex Bruczkowski
- *  
- *  Error is the difference between set point and actual point
- *  
- */
+    Maze Solving Robot
+    2018/2019
+    Christina Bornberg, Alex Bruczkowski
+
+    Error is the difference between set point and actual point
+
+*/
 
 // ********** EMERGENCY **********
 // avoid bumping, if any wall is close
@@ -29,10 +29,13 @@ void correct_bumping() {
   }
 }
 
-// use PID to be in the middle while go_ahead()
+// ********** PID GO AHEAD **********
 void correct_offset() {
 
-  ahead_max_distance = (distance[RIGHT] + distance[LEFT]);
+  // make system more robust
+  if (distance[RIGHT] > END_DISTANCE && distance[LEFT] > END_DISTANCE && distance[RIGHT] != 0 && distance[LEFT] != 0) {
+    ahead_max_distance = (distance[RIGHT] + distance[LEFT]);
+  }
   setpoint = ahead_max_distance / 2;
   offset = ahead_max_distance / 3; // was /3 before
 
@@ -40,30 +43,27 @@ void correct_offset() {
     input = distance[RIGHT];
   } else input = distance[LEFT];
 
-  controller_mapping(distance[LEFT], distance[RIGHT]); // beeds to be [LEFT], [RIGHT]
+  controller_mapping(distance[LEFT], distance[RIGHT]); // needs to be [LEFT], [RIGHT]
 
 }
 
+// ********** PID GO STRAIGHT (1st round) **********
+// ahead_max_distance comes from last time, two walls were detected
 void correct_straight_left_wall() {
-
-  int max_distance = ahead_max_distance;
-  setpoint = max_distance / 2;
-  offset = max_distance / 4;
-
+  setpoint = ahead_max_distance / 2;
+  offset = ahead_max_distance / 3;
   input = distance[LEFT];
-  // errorP = abs(distance[LEFT] - setpoint);
 
   // TODO: need to test that
   controller_mapping(distance[LEFT], setpoint);
 
 }
 
+// ********** PID GO STRAIGHT (2nd+ round) **********
+// ahead_max_distance comes from last time, two walls were detected
 void correct_straight_right_wall() {
-
-  int max_distance = ahead_max_distance;
-  setpoint = max_distance / 2;
-  offset = max_distance / 4;
-
+  setpoint = ahead_max_distance / 2;
+  offset = ahead_max_distance / 3;
   input = distance[RIGHT];
 
   // TODO: need to test that
@@ -71,19 +71,7 @@ void correct_straight_right_wall() {
 
 }
 
-
-// use PID to correct the angle while go_ahead()
-void correct_angle() {
-
-}
-
-// use PID to go faster in second round
-// for N, M, R - we can calucalte error in the front and go faster (1st round)
-void correct_forward() {
-
-}
-
-
+// ********** MAPPING PID OUTPUT TO PWM **********
 void controller_mapping(int distance1, int distance2) {
 
   int output_left;
@@ -91,16 +79,15 @@ void controller_mapping(int distance1, int distance2) {
   double errorP;
 
   errorP = abs(distance1 - distance2);
-  // errorP = abs(distance[RIGHT] - setpoint);
   print_errorP_and_offset(errorP);
 
   if (errorP <= offset) { // just need little change
-    offset_pid.SetTunings(kp, 0, kd);
+    pid_ctrl.SetTunings(kp, ki, kd);
   } else { // need to change a lot
-    offset_pid.SetTunings(much_kp, 0, much_kd);
+    pid_ctrl.SetTunings(much_kp, much_ki, much_kd);
   }
 
-  offset_pid.Compute();
+  pid_ctrl.Compute();
 
   if (distance1 > distance2 + offset) { // go to the left
     output_left = map(output, 0, ahead_max_distance, DEFAULT_LEFT_SPEED, DEFAULT_STOP_SPEED);

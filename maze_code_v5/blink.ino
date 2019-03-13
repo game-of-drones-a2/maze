@@ -7,7 +7,8 @@
  *  
  */
 
-// ********* LEDs that show, where no wall is ********
+// ********* LEDs show, which letter is detected **********
+// in first round it's where no wall is found
 void blink(int left, int front, int right){
   if(left == 1){
     digitalWrite(led_left, HIGH);  

@@ -25,7 +25,7 @@ void start_maze() {
   // LED
   //blink(1, 1, 1);
   letter_list_2 = "";
-  letter_index = 0;
+  letter.index = 0;
   round_number ++;
   Serial.print("button pressed ");
   Serial.println(round_number);
@@ -33,8 +33,8 @@ void start_maze() {
   // INITIALISATION ROUND 2
   if (round_number == 2) {
     transfer_table();
-    letter_list_letter = get_letter();
-    letter_index++;
+    letter.list = get_letter();
+    letter.index++;
     Serial.println(letter_list);
   }
   // SERVOS
@@ -48,9 +48,13 @@ void start_maze() {
   while (true) {
     three_usonics();
     print_distances();
-    if (wall(distance[LEFT]) || wall(distance[FRONT]) || wall(distance[RIGHT])) {
+    if (wall(distance[LEFT]) || wall(distance[FRONT]) || wall(distance[RIGHT])) { 
       // if there is any wall detected
-      ahead_max_distance = distance[LEFT] + distance[RIGHT];
+      if (wall(distance[LEFT]) && wall(distance[RIGHT])){
+        ahead_max_distance = distance[LEFT] + distance[RIGHT];  
+      }else{
+        ahead_max_distance = DEFAULT_STEADY_DISTANCE;
+      }
       break;
     }
   }

@@ -16,6 +16,8 @@ void three_usonics(){
 
 // ********** GET THE DISTANCE IN CM, FOR THE GIVEN SONAR SENSOR **********
 // ping_cm: Send a ping, returns the distance in centimeters or 0 (zero) if no ping echo within set distance limit 
+// delay is used, as we need to wait for all data anyways, there is nothing usefull that can be done 
+// by using millis instead
 int get_usonic_data(NewPing sonar){
     delay(75); // minimum 33 ms
     return sonar.ping_cm();

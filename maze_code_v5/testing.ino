@@ -3,6 +3,7 @@
     2018/2019
     Christina Bornberg, Alex Bruczkowski
 
+    debugging file
     Testing and printing
     (un)comment stuff, you (don't) want to be printed/tested
     TODO: need to just save B once
@@ -80,8 +81,8 @@ void print_errorP_and_offset(double errorP) {
 
 void print_letters(){
   /*Serial.print("Direction letter: ");
-  Serial.print(direction_letter);
+  Serial.print(letter.dir);
   Serial.print(",");
-  Serial.println(letter_index);
+  Serial.println(letter.index);
   //*/
 }

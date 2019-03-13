@@ -4,6 +4,7 @@
     Christina Bornberg, Alex Bruczkowski
 
     working with servos here
+    due to controllers, we don't need that perfect values for ahead and straight
 
     INITIAL VALUES
     go straight - left: 1700, right: 1420
@@ -23,7 +24,7 @@ void set_servos() {
 }
 
 void set_servo_values() {
-  switch (direction_letter) {
+  switch (letter.dir) {
     case 'A': blink(0, 1, 0); set_ahead(); break; // go ahead, when nothing else
     case 'L': blink(1, 1, 0); set_left(); break; // turn about 90deg
     case 'M': blink(1, 0, 1); set_left(); break;
@@ -46,13 +47,8 @@ void set_left() {
 // ********* STRAIGHT **********
 // go straight, until a wall is detected (1st round 'R', second round 'L')
 void set_straight(int round_number) { 
-  if (round_number == 1) {
     servo_pwm[LEFT] = DEFAULT_LEFT_SPEED;
     servo_pwm[RIGHT] = DEFAULT_RIGHT_SPEED;
-  } else if (round_number > 1) {
-    servo_pwm[LEFT] = DEFAULT_LEFT_SPEED;
-    servo_pwm[RIGHT] = DEFAULT_RIGHT_SPEED;
-  }
 }
 
 // ********* STRAIGHT AHEAD *********
@@ -64,14 +60,8 @@ void set_ahead() {
 // ********* RIGHT *********
 //To do: adjust values to turn sharper
 void set_right() {
-  // if (round_number = 1) {
   servo_pwm[LEFT] = 1650; // DEFAULT_LEFT_SPEED;
   servo_pwm[RIGHT] = 1480; //DEFAULT_LEFT_SPEED;
-  /* } else {
-     servo_pwm[LEFT] = DEFAULT_LEFT_SPEED;
-     servo_pwm[RIGHT] = DEFAULT_LEFT_SPEED;
-     correct_forward(); // TODO
-    }*/
 }
 
 // ********* 180 deg turn **********
