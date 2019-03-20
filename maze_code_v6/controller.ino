@@ -15,17 +15,39 @@
 // TODO: find out if "if" or "else if" is better
 void correct_bumping() {
   // just use a P controller
-  if (close_wall(distance[LEFT]) == true) {
+  while (close_wall(distance[LEFT]) == true && close_wall(distance[FRONT]) == true){
+    Serial.println("Correct");
+    servo_pwm[LEFT] = 1650;
+    servo_pwm[RIGHT] = 1400;
+    set_servos();
+  }
+  while (close_wall(distance[FRONT]) == true && close_wall(distance[RIGHT]) == true){
+    Serial.println("Correct");
+    servo_pwm[LEFT] = 1350;
+    servo_pwm[RIGHT] = 1600;
+    set_servos();
+    three_usonics();
+  }
+  while (close_wall(distance[LEFT]) == true) {
+    Serial.println("Correct");
     servo_pwm[LEFT] = 1550;
     servo_pwm[RIGHT] = 1550;
+    set_servos();
+    three_usonics();
   }
-  if (close_wall(distance[FRONT]) == true) {
-    servo_pwm[LEFT] = 1300;
-    servo_pwm[RIGHT] = 1600;//1570;
+  while (close_wall(distance[FRONT]) == true) {
+    Serial.println("Correct");
+    servo_pwm[LEFT] = 1450;
+    servo_pwm[RIGHT] = 1550;
+    set_servos();
+    three_usonics();
   }
-  if (close_wall(distance[RIGHT]) == true) {
-    servo_pwm[LEFT] = 1460;
-    servo_pwm[RIGHT] = 1460;
+  while (close_wall(distance[RIGHT]) == true) {
+    Serial.println("Correct");
+    servo_pwm[LEFT] = 1450;
+    servo_pwm[RIGHT] = 1450;
+    set_servos();
+    three_usonics();
   }
 }
 
@@ -36,6 +58,8 @@ void correct_offset() {
   if (distance[RIGHT] > END_DISTANCE && distance[LEFT] > END_DISTANCE && distance[RIGHT] != 0 && distance[LEFT] != 0) {
     ahead_max_distance = (distance[RIGHT] + distance[LEFT]);
   }
+  distance_ahead[LEFT] = distance[LEFT];
+  distance_ahead[RIGHT] = distance[RIGHT];
   setpoint = ahead_max_distance / 2;
   offset = ahead_max_distance / 3; // was /3 before
 

@@ -5,7 +5,7 @@ void turning_left() {
 
   o = distance[LEFT];
 
-  output_left = map(o, 1, ahead_max_distance, 1550, 1650);
+  output_left = map(o, 1, 70, 1550, 1650);
   output_right = 1350;
 
   servo_pwm[LEFT] = output_left;
@@ -23,7 +23,7 @@ void turning_right() {
   o = distance[RIGHT];
 
   output_left = 1650;
-  output_right = map(o, 1, ahead_max_distance, 1450, 1350);
+  output_right = map(o, 1, 70, 1450, 1350);
   // higher number first for going right as far as I understand
 
   servo_pwm[LEFT] = output_left;
