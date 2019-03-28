@@ -7,6 +7,7 @@
     nothing with servos / sensors here
     should compare the analyse 1 letter with the letter list
 
+    WORKS FINE
 */
 
 // ********** COMPARES LETTER FROM LIST TO ANALYSED LETTER *********

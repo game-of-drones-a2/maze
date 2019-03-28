@@ -21,6 +21,18 @@ int get_usonic_data(NewPing sonar){
     return sonar.ping_cm();
 }
 
+// not used right now
+void wrong_measurement_check(int last_dis, int dis){
+  if(dis == 0 && last_dis < 5 && last_dis != 0){ // last distance smaller than 5
+    // stop for making new measurement
+    servo_pwm[LEFT] = 1500;
+    servo_pwm[RIGHT] = 1500;
+    set_servos();
+    // make measurement while standing still
+    three_usonics();   
+  }
+}
+
 // ********** NO WALL DETECTED **********
 // no wall is detected, when the distance is either bigger than MAX_WALL_DISTANCE
 // or if there is no wall detected

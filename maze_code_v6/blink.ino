@@ -5,6 +5,8 @@
  *  
  *  LEDs
  *  
+ *  WORKS FINE
+ *  
  */
 
 // ********* LEDs show, which letter is detected **********

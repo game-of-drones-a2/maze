@@ -12,8 +12,8 @@ void turning_left() {
   int output_left = 1500, output_right = 1500;
 
   o = distance_ahead[LEFT];
-  output_left = map(o, 1, 500, 1550, 1650); // PIVOT, STRAIGHT
-  output_right = map(o, 1, 500, 1400, 1350); // PIVOT, STRAIGHT
+  output_left = 1550; // map(o, 1, 500, 1550, 1650); // PIVOT, STRAIGHT
+  output_right = 1400; // map(o, 1, 500, 1400, 1350); // PIVOT, STRAIGHT
   servo_pwm[LEFT] = output_left;
   servo_pwm[RIGHT] = output_right;
 }
@@ -23,8 +23,8 @@ void turning_right() {
   int output_left = 1500, output_right = 1500;
 
   o = distance_ahead[RIGHT];
-  output_left = map(o, 1, 500, 1600, 1650); // PIVOT, STRAIGHT
-  output_right = map(o, 1, 500, 1450, 1350);
+  output_left = 1650; // map(o, 1, 500, 1600, 1650); // PIVOT, STRAIGHT
+  output_right = 1480; // map(o, 1, 500, 1450, 1350);
   // output_right = map(o, 1, 50, 1350, 1550);
   // higher number first for going right as far as I understand
   servo_pwm[LEFT] = output_left;

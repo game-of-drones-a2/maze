@@ -15,7 +15,7 @@
 // TODO: find out if "if" or "else if" is better
 void correct_bumping() {
   // just use a P controller
-  while (close_wall(distance[LEFT]) == true && close_wall(distance[FRONT]) == true){
+  /*while (close_wall(distance[LEFT]) == true && close_wall(distance[FRONT]) == true){
     Serial.println("Correct");
     servo_pwm[LEFT] = 1650;
     servo_pwm[RIGHT] = 1400;
@@ -27,25 +27,25 @@ void correct_bumping() {
     servo_pwm[RIGHT] = 1600;
     set_servos();
     three_usonics();
-  }
+  }*/
   while (close_wall(distance[LEFT]) == true) {
     Serial.println("Correct");
-    servo_pwm[LEFT] = 1550;
-    servo_pwm[RIGHT] = 1550;
+    servo_pwm[LEFT] = 1650;
+    servo_pwm[RIGHT] = 1600;
     set_servos();
     three_usonics();
   }
   while (close_wall(distance[FRONT]) == true) {
     Serial.println("Correct");
-    servo_pwm[LEFT] = 1450;
-    servo_pwm[RIGHT] = 1550;
+    servo_pwm[LEFT] = 1400;
+    servo_pwm[RIGHT] = 1600;
     set_servos();
     three_usonics();
   }
   while (close_wall(distance[RIGHT]) == true) {
     Serial.println("Correct");
-    servo_pwm[LEFT] = 1450;
-    servo_pwm[RIGHT] = 1450;
+    servo_pwm[LEFT] = 1400;
+    servo_pwm[RIGHT] = 1350;
     set_servos();
     three_usonics();
   }
@@ -113,7 +113,7 @@ void controller_mapping(int distance1, int distance2) {
   pid_ctrl.Compute();
 
   if (distance1 > distance2 + offset) { // go to the left
-    output_left = map(output, 0, ahead_max_distance, DEFAULT_LEFT_SPEED, DEFAULT_STOP_SPEED);
+    output_left = map(output, 0, ahead_max_distance, DEFAULT_LEFT_SPEED, 1560);
     output_right = map(output, 0, ahead_max_distance, DEFAULT_STOP_SPEED, DEFAULT_RIGHT_SPEED);
   } else if (distance2 > distance1 + offset) { // go to the right
     output_left = map(output, 0, ahead_max_distance, DEFAULT_STOP_SPEED, DEFAULT_LEFT_SPEED);

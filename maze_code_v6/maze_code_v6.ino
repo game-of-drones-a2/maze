@@ -19,7 +19,7 @@
 #define DLEFT_SLEFT 1550
 #define DLEFT_SRIGHT 1350
 
-#define DRIGHT_SLEFT 1600
+#define DRIGHT_SLEFT 1650
 #define DRIGHT_SRIGHT 1450
 
 // DISTANCES IN cm - USONIC SENSOR
@@ -87,24 +87,19 @@ NewPing sonar[SONAR_NUM] = { // NewPing object array
   NewPing(usonic_right_trigger, usonic_right_echo, MAX_DISTANCE),
   NewPing(usonic_front_trigger, usonic_front_echo, MAX_DISTANCE)
 };
+
 int distance[3];
-int distance_ahead[2];
 
 // ********** CONTROLLER **********
+int distance_ahead[2];
 double setpoint, input, output;
 double ahead_max_distance; // just change if 2 walls detected
 int offset;
-
-// Specify the links and initial tuning parameters
-// set integral part maybe to 0
-double kp = 1, ki = 0.05, kd = 0.25;
-double much_kp = 3, much_ki = 0.3, much_kd = 1; // kp was 4 before
+// ki = 0.05 much_ki = 0.2
+double kp = 1, ki = 0, kd = 0.25;
+double much_kp = 1.25, much_ki = 0, much_kd = 0.3; // kp was 4 before
 
 PID pid_ctrl(&input, &output, &setpoint, kp, ki, kd, DIRECT);
-// PID offset_pid_right(&input_right, &output_right, &setpoint, kp, ki, kd, DIRECT);
-// PID anglePID(&Input, &Output, &Setpoint, Kp, Ki, Kd, DIRECT);
-// PID forwardPID(&Input, &Output, &Setpoint, Kp, Ki, Kd, DIRECT);
-
 
 /*  Maze Solving Robot
   //  2018/2019
@@ -128,8 +123,8 @@ PID pid_ctrl(&input, &output, &setpoint, kp, ki, kd, DIRECT);
 
 // ********** INITIALISATION *********
 void setup() {
-  Serial.begin(9600);
-  //Serial.begin(115200);
+  //Serial.begin(9600);
+  Serial.begin(115200); // depending on the cable
 
   // Controller for correction
   pid_ctrl.SetMode(AUTOMATIC);
@@ -169,10 +164,11 @@ void loop() {
   } else {
     // ********** GET DATA OF USONIC **********
     three_usonics();
-    correct_bumping(); // emergency case
+    // wrong_measurement_check(int last_dis, int dis); 
     print_distances();
     // ********* FIND OUT WHERE TO GO *********
     if (letter.dir != 'B') {
+      correct_bumping(); // emergency case
       letter.dir = analyse_where_to_go(distance); // different in number 2 !?
       while (letter.check != letter.dir) {
         // need to get 2 same letters to react, makes the system more robust
@@ -204,11 +200,11 @@ void loop() {
           correct_straight_right_wall(); // no left wall
         }
         break;
-      case ('L'): turning_left(); break;
+/*      case ('L'): turning_left(); break;
       case ('M'): turning_left(); break;
       case ('N'): turning_left(); break;
-      case ('R'): turning_right(); break;
-      case ('B'): correct_bumping(); break;
+      case ('R'): turning_right(); break;*/
+      // case ('B'): correct_bumping(); break;
       default: Serial.println("No exception: B or P"); break;
     }
 
